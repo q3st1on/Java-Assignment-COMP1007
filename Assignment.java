@@ -377,6 +377,51 @@ public class Assignment
 
     }
 
+    static void addBook()
+    {
+        System.out.println("************************************");
+        System.out.println("              Add Book              ");
+        System.out.println("************************************"); 
+        System.out.println();
+
+        Book newBook = new Book();
+
+        System.out.print("Enter Book Title: ");
+        newBook.setTitle(sc.next());
+        System.out.print("Enter Book Year: ");
+        newBook.setYear(sc.next());
+        System.out.print("Enter Book ISBN: ");
+        newBook.setISBN(sc.next());
+        System.out.print("Enter Book Edition: ");
+        newBook.setEdition(sc.nextInt());
+        System.out.print("Is Book an eBook? ");
+        String reply = sc.next().toLowerCase();
+        if (reply.equals("y") || reply.equals("yes") || reply.equals("t") || reply.equals("true"))
+        {
+            newBook.setEbook(true);
+        }
+        else
+        {
+            newBook.setEbook(false);
+        }
+        System.out.print("How many Authors are there?");
+        int authorCount = sc.nextInt();
+        for (int i = 0; i < authorCount; i++)
+        {
+            Author newAuthor = new Author();
+            System.out.print("Enter Author First Name: ");
+            newAuthor.setFirstName(sc.next());
+            System.out.print("Enter Author Last Name: ");
+            newAuthor.setLastName(sc.next());
+            System.out.print("Enter Author Nationality: ");
+            newAuthor.setNationality(sc.next());
+            System.out.print("Enter Author Birth Year: ");
+            newAuthor.setBirthYear(sc.next());
+            newAuthor.addBook(newBook);
+            newBook.addAuthor(newAuthor);
+        }
+
+    }
     public static void main(String[] args)
     {
         try
