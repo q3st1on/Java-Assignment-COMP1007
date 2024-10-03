@@ -229,6 +229,40 @@ public class Assignment
         return sc.nextInt();
     }
 
+    static void bookPrinter(Book[] books)
+    {
+        if (books.length == 1)
+        {
+            if (books[0] == null)
+            {
+                System.out.println();
+                System.out.println("No Books Found");
+            }
+        }
+        else
+        {
+            for (Book book : books)
+            {
+                System.out.println();
+                System.out.println("Book:");
+                System.out.printf(" Title: %s\n", book.getTitle());
+                System.out.printf(" Published: %s\n", book.getYear());
+                System.out.printf(" ISBN: %s\n", book.getISBN());
+                System.out.printf(" eBook: %b\n", book.isEbook());
+                System.out.printf(" Edition: %d\n", book.getEdition());
+                System.out.printf(" Authors: %d\n", book.getAuthorCount());
+    
+                for (int i = 0; i < book.getAuthorCount(); i++)
+                {
+                    System.out.println(" Author:");
+                    System.out.printf("  Name: %s\n", book.getAuthors()[i].toString());
+                    System.out.printf("  Nationality: %s\n", book.getAuthors()[i].getNationality());
+                    System.out.printf("  Born: %s\n", book.getAuthors()[i].getBirthYear());
+                }
+            }
+        }
+    }
+
     static void booksByAuthor()
     {
         System.out.println("************************************");
@@ -269,27 +303,76 @@ public class Assignment
             }
         }
 
-        System.out.println();
+        bookPrinter(foundBooks);
 
+        System.out.println("************************************");
+
+    }
+
+    static void eBooks()
+    {
+        System.out.println("************************************");
+        System.out.println("               eBooks               ");
+        System.out.println("************************************");
+
+        Book[] foundBooks = new Book[1];
+        boolean b1 = true;
+
+        
         for (Book book : books)
         {
-            System.out.println("Book:");
-            System.out.printf(" Title: %s\n", book.getTitle());
-            System.out.printf(" Published: %s\n", book.getYear());
-            System.out.printf(" ISBN: %s\n", book.getISBN());
-            System.out.printf(" eBook: %b\n", book.isEbook());
-            System.out.printf(" Edition: %d\n", book.getEdition());
-            System.out.printf(" Authors: %d\n", book.getAuthorCount());
-
-            for (int i = 0; i < book.getAuthorCount(); i++)
+            if (book.isEbook())
             {
-                System.out.println(" Author:");
-                System.out.printf("  Name: %s\n", book.getAuthors()[i].toString());
-                System.out.printf("  Nationality: %s\n", book.getAuthors()[i].getNationality());
-                System.out.printf("  Born: %s\n", book.getAuthors()[i].getBirthYear());
+                if (b1)
+                {
+                    foundBooks[0] = book;
+                    b1 = false;
+                }
+                else
+                {
+                    Book[] fb = Arrays.copyOf(foundBooks, foundBooks.length + 1);
+                    foundBooks = fb;
+                    foundBooks[foundBooks.length-1] = book;
+                }
             }
         }
     
+        bookPrinter(foundBooks);
+
+        System.out.println("************************************");
+
+    }
+
+    static void noneBooks()
+    {
+        System.out.println("************************************");
+        System.out.println("             Non-eBooks             ");
+        System.out.println("************************************");
+
+        Book[] foundBooks = new Book[1];
+        boolean b1 = true;
+
+        
+        for (Book book : books)
+        {
+            if (!book.isEbook())
+            {
+                if (b1)
+                {
+                    foundBooks[0] = book;
+                    b1 = false;
+                }
+                else
+                {
+                    Book[] fb = Arrays.copyOf(foundBooks, foundBooks.length + 1);
+                    foundBooks = fb;
+                    foundBooks[foundBooks.length-1] = book;
+                }
+            }
+        }
+    
+        bookPrinter(foundBooks);
+
         System.out.println("************************************");
 
     }
@@ -298,7 +381,7 @@ public class Assignment
     {
         try
         {
-            String[][] CSVData =  csvReader("/home/q3st1on/uni/COMP1007/StartingDataFile.csv");
+            String[][] CSVData =  csvReader("StartingDataFile.csv");
             genBooks(CSVData);
             System.out.println(Arrays.deepToString(books));
             boolean loop = true;
@@ -306,12 +389,15 @@ public class Assignment
             {
                 switch (printMenu()) {
                     case 1:
+                        bookPrinter(books);
                         break;
         
                     case 2:
+                        eBooks();
                         break;
         
                     case 3:
+                        noneBooks();
                         break;
         
                     case 4:
