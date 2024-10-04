@@ -94,6 +94,11 @@ class Book
         }
     }
 
+    public void overwriteAuthor(int i, Author newAuthor)
+    {
+        authors[i] = newAuthor;
+    }
+    
     @Override
     public String toString()
     {
@@ -107,7 +112,29 @@ public class Assignment
     static Scanner sc = new Scanner(System.in);
 
     static Book[] books = new Book[1];
+    static Author[] authors = new Author[1];
+    
+    static int getInt()
+    {
+        boolean loop = true;
+        int result;
+        while (loop)
+        {
+            try
+            {
+                result = sc.nextInt();
+                loop = false;
+            }
+            catch (InputMismatchException e)
+            {
+                System.out.println("Invalid Input! Please enter an integer :)");
+                sc.next();
+            }
+        }
 
+        return result;
+    }
+    
     static String[][] csvReader(String csvPath)
     {
         FileInputStream fs = null;
@@ -160,6 +187,46 @@ public class Assignment
         return Data;
     }
 
+    static void addAuthors(Author newAuthor)
+    {
+        if (authors.length() == 1 && authors[0] == null)
+        {
+            authors[0] = newAuthor;
+        }
+        else
+        {
+            Author[] newAuthors = new Author[1];
+            boolean unique = true;
+            int newAuthorHash = newAuthor.hashCode();
+            
+            for (Author author : authors)
+            {
+                if (author.hashCode() == newAuthorHash)
+                {
+                    unique = false;
+                    for (Book book : newAuthor.getBooks())
+                    {
+                        author.addBook(book);
+                        for (int i = 0; i < book.getAuthorCount(); i++)
+                        {
+                            if (book.getAuthors()[i] == newAuthor)
+                            {
+                                book.overwriteAuthor(i, author);
+                            }
+                        }
+                    }
+                }
+            }
+    
+            if (unique)
+            {
+                Author[] authors1 = Arrays.copyOf(authors, authors.length + 1);
+                authors = authors1;
+                authors[authors.length-1] = newAuthor;
+            }
+        }
+    }
+    
     static void genBooks(String[][]CSVData)
     {
         for (int i = 1; i < CSVData.length; i++)
@@ -185,6 +252,7 @@ public class Assignment
                     newAuthor.addBook(newBook);
 
                     newBook.addAuthor(newAuthor);
+                    addAuthors(newAuthor);
                 }
 
             }
@@ -226,7 +294,7 @@ public class Assignment
         System.out.println("************************************");
         System.out.print("Your choice: ");
         
-        return sc.nextInt();
+        return getInt();
     }
 
     static void bookPrinter(Book[] books)
@@ -272,7 +340,7 @@ public class Assignment
         String name = sc.next();
 
         Book[] foundBooks = new Book[1];
-        boolean b1 = true;
+        boolean first = true;
 
         Pattern pattern = Pattern.compile(name, Pattern.CASE_INSENSITIVE);
         
@@ -289,10 +357,10 @@ public class Assignment
 
             if (match)
             {
-                if (b1)
+                if (first)
                 {
                     foundBooks[0] = book;
-                    b1 = false;
+                    first = false;
                 }
                 else
                 {
@@ -316,17 +384,17 @@ public class Assignment
         System.out.println("************************************");
 
         Book[] foundBooks = new Book[1];
-        boolean b1 = true;
+        boolean first = true;
 
         
         for (Book book : books)
         {
             if (book.isEbook())
             {
-                if (b1)
+                if (first)
                 {
                     foundBooks[0] = book;
-                    b1 = false;
+                    first = false;
                 }
                 else
                 {
@@ -350,17 +418,17 @@ public class Assignment
         System.out.println("************************************");
 
         Book[] foundBooks = new Book[1];
-        boolean b1 = true;
+        boolean first = true;
 
         
         for (Book book : books)
         {
             if (!book.isEbook())
             {
-                if (b1)
+                if (first)
                 {
                     foundBooks[0] = book;
-                    b1 = false;
+                    first = false;
                 }
                 else
                 {
@@ -393,7 +461,7 @@ public class Assignment
         System.out.print("Enter Book ISBN: ");
         newBook.setISBN(sc.next());
         System.out.print("Enter Book Edition: ");
-        newBook.setEdition(sc.nextInt());
+        newBook.setEdition(getInt());
         System.out.print("Is Book an eBook? ");
         String reply = sc.next().toLowerCase();
         if (reply.equals("y") || reply.equals("yes") || reply.equals("t") || reply.equals("true"))
@@ -405,7 +473,7 @@ public class Assignment
             newBook.setEbook(false);
         }
         System.out.print("How many Authors are there?");
-        int authorCount = sc.nextInt();
+        int authorCount = getInt();
         for (int i = 0; i < authorCount; i++)
         {
             Author newAuthor = new Author();
@@ -419,6 +487,7 @@ public class Assignment
             newAuthor.setBirthYear(sc.next());
             newAuthor.addBook(newBook);
             newBook.addAuthor(newAuthor);
+            addAuthors(newAuthor);
         }
 
     }
@@ -428,7 +497,6 @@ public class Assignment
         {
             String[][] CSVData =  csvReader("StartingDataFile.csv");
             genBooks(CSVData);
-            System.out.println(Arrays.deepToString(books));
             boolean loop = true;
             while (loop)
             {
