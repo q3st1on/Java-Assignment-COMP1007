@@ -525,7 +525,8 @@ public class Assignment
         
                     case 7:
                         loop = false;
-        
+                        break;
+                        
                     default:
                         System.out.println("Please choose a valid menu option (enter 1-7)");
                 }
