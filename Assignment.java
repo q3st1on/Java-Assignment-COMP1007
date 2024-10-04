@@ -17,7 +17,6 @@ class Author
     public String getBirthYear() { return birthYear; }
     public Book[] getBooks() { return books; }
 
-    
     public void setFirstName(String newFirstName) { firstName = newFirstName; }
     public void setLastName(String newLastName) { familyName = newLastName; }
     public void setNationality(String newNationality) { nationality = newNationality; }
@@ -54,7 +53,6 @@ class Author
         }
         return hashCode;
     }
-
 }
 
 class Book
@@ -102,7 +100,6 @@ class Book
     {
         return String.format("Title: %-30s | Year: %-6s | Author: %-20s | ISBN: %-14s | Edition: %-3d | Ebook: %b ", title, year, authors[0], isbn, edition, ebook);
     }
-
 }
 
 public class Assignment
@@ -252,7 +249,6 @@ public class Assignment
                     newBook.addAuthor(newAuthor);
                     addAuthors(newAuthor);
                 }
-
             }
 
             if (i == 1)
@@ -297,7 +293,6 @@ public class Assignment
 
     static void bookPrinter(Book[] books)
     {
-
         if (books[0] == null)
         {
             System.out.println();
@@ -349,7 +344,7 @@ public class Assignment
                     match = true;
                 }
             }
-
+            
             if (match)
             {
                 if (foundBooks[0] == null)
@@ -369,7 +364,6 @@ public class Assignment
         bookPrinter(foundBooks);
 
         System.out.println("************************************");
-
     }
 
     static void eBooks()
@@ -401,7 +395,6 @@ public class Assignment
         bookPrinter(foundBooks);
 
         System.out.println("************************************");
-
     }
 
     static void noneBooks()
@@ -433,7 +426,6 @@ public class Assignment
         bookPrinter(foundBooks);
 
         System.out.println("************************************");
-
     }
 
     static void addBook()
@@ -480,8 +472,8 @@ public class Assignment
             newBook.addAuthor(newAuthor);
             addAuthors(newAuthor);
         }
-
     }
+    
     public static void main(String[] args)
     {
         try
