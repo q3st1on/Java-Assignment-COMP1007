@@ -10,7 +10,6 @@ class Author
     private String nationality;
     private String birthYear;
     private Book[] books = new Book[1];
-    private boolean f1 = true;
 
     public String getFirstName() { return firstName; }
     public String getLastName() { return familyName; }
@@ -26,10 +25,9 @@ class Author
 
     public void addBook(Book newBook)
     {
-        if (f1)
+        if (books[0] == null)
         {
             books[0] = newBook;
-            f1 = false;
         }
         else
         {
@@ -189,7 +187,7 @@ public class Assignment
 
     static void addAuthors(Author newAuthor)
     {
-        if (authors.length() == 1 && authors[0] == null)
+        if (authors[0] == null)
         {
             authors[0] = newAuthor;
         }
@@ -299,13 +297,11 @@ public class Assignment
 
     static void bookPrinter(Book[] books)
     {
-        if (books.length == 1)
+
+        if (books[0] == null)
         {
-            if (books[0] == null)
-            {
-                System.out.println();
-                System.out.println("No Books Found");
-            }
+            System.out.println();
+            System.out.println("No Books Found");
         }
         else
         {
@@ -340,7 +336,6 @@ public class Assignment
         String name = sc.next();
 
         Book[] foundBooks = new Book[1];
-        boolean first = true;
 
         Pattern pattern = Pattern.compile(name, Pattern.CASE_INSENSITIVE);
         
@@ -357,7 +352,7 @@ public class Assignment
 
             if (match)
             {
-                if (first)
+                if (foundBooks[0] == null)
                 {
                     foundBooks[0] = book;
                     first = false;
@@ -384,14 +379,12 @@ public class Assignment
         System.out.println("************************************");
 
         Book[] foundBooks = new Book[1];
-        boolean first = true;
-
         
         for (Book book : books)
         {
             if (book.isEbook())
             {
-                if (first)
+                if (foundBooks[0] == null)
                 {
                     foundBooks[0] = book;
                     first = false;
@@ -418,14 +411,12 @@ public class Assignment
         System.out.println("************************************");
 
         Book[] foundBooks = new Book[1];
-        boolean first = true;
-
         
         for (Book book : books)
         {
             if (!book.isEbook())
             {
-                if (first)
+                if (foundBooks[0] == null)
                 {
                     foundBooks[0] = book;
                     first = false;
