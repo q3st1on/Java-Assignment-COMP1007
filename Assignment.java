@@ -113,6 +113,8 @@ public class Assignment
 
     static Book[] books = new Book[1];
     static Author[] authors = new Author[1];
+static String filePath = ;
+
     
     static int getInt()
     {
@@ -242,6 +244,13 @@ public class Assignment
                 authors[authors.length-1] = newAuthor;
             }
         }
+    }
+
+static void writeCSV() 
+    {
+for (Book book : books)
+{
+}
     }
     
     static void genBooks(String[][]CSVData)
@@ -730,10 +739,12 @@ public class Assignment
         
                     case 5:
                         addBook();
+                        writeCSV();
                         break;
         
                     case 6:
                         editBook();
+                        writeCSV();
                         break;
         
                     case 7:
@@ -744,6 +755,7 @@ public class Assignment
                         System.out.println("Please choose a valid menu option (enter 1-7)");
                 }
             }
+            writeCSV();
         }
         catch (Exception e)
         {
