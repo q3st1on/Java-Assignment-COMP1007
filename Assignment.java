@@ -985,6 +985,7 @@ public class Assignment
                         
                     default:
                         System.out.println("Please choose a valid menu option (enter 1-7)");
+                        pauseExecution();
                 }
             }
             writeCSV();
