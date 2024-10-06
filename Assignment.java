@@ -79,6 +79,7 @@ class Book
     public void setEdition(int newEdition) { edition = newEdition; }
     public void setYear(String newYear) { year = newYear; }
     public void setAuthorCount(int newAuthorCount) { authorCount = newAuthorCount; }
+
     public void addAuthor(Author newAuthor) {
         if (authorCount < 3)
         {
@@ -97,7 +98,7 @@ class Book
             }
             else
             {
-                System.out.println("Error: Author already added to book!");
+                System.err.println("Error: Author already added to book!");
             }
         }
         else
@@ -151,11 +152,14 @@ public class Assignment
         }
     }
 
-    static int getInt() { // Integer Input Func
-        try {
+    static int getInt() // Integer Input Func
+    { 
+        try
+        {
             return sc.nextInt(); // Try to read int from Scanner and return that
         }
-        catch (InputMismatchException e) { // Catch Input Mismatch
+        catch (InputMismatchException e) // Catch Input Mismatch
+        { 
             System.out.print("\nError: invalid input. Please enter an integer value\n> "); // Prompt user to enter an actual int
             sc.next(); // Clear invalid input to avoid looping triggering of the catch block
             return getInt(); // Recursively call getInt till valid input is found and return that
@@ -329,6 +333,7 @@ public class Assignment
 
                     writeCSVLine(array, fileStream);
                 }
+                fileStream.flush();
                 fileStream.close();
 
                 tempFile.renameTo(outFile);
@@ -354,9 +359,6 @@ public class Assignment
             }
             e.printStackTrace();
         }
-
-
-
     }
     
     static void genBooks(String[][]CSVData)
