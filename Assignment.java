@@ -78,11 +78,27 @@ class Book
     public void setISBN(String newISBN) { isbn = newISBN; }
     public void setEdition(int newEdition) { edition = newEdition; }
     public void setYear(String newYear) { year = newYear; }
+    public void setAuthorCount(int newAuthorCount) { authorCount = newAuthorCount; }
     public void addAuthor(Author newAuthor) {
         if (authorCount < 3)
         {
-            authors[authorCount] = newAuthor;
-            authorCount ++;
+            boolean unique = true;
+            for (int i = 0; i < authorCount; i++)
+            {
+                if (newAuthor.hashCode() == authors[i].hashCode())
+                {
+                    unique = false;
+                }
+            }
+            if (unique)
+            {
+                authors[authorCount] = newAuthor;
+                authorCount ++;
+            }
+            else
+            {
+                System.out.println("Error: Author already added to book!");
+            }
         }
         else
         {
@@ -116,6 +132,11 @@ public class Assignment
     static String filePath = "StartingDataFile.csv";
     static String[] csvHeader;
     
+    static void clearTerm() { // Clear whole terminal
+        System.out.print("\033[2J"); // ANSI code to erase whole terminal
+        System.out.print("\033[1;1H"); // ANSI code to move cursor to top left of terminal
+    }
+
     private static String getInput() {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
   
@@ -130,46 +151,29 @@ public class Assignment
         }
     }
 
-    static int getInt()
-    {
-        boolean loop = true;
-        int result = 0;
-        while (loop)
-        {
-            try
-            {
-                result = sc.nextInt();
-                loop = false;
-            }
-            catch (InputMismatchException e)
-            {
-                System.out.println("Invalid Input! Please enter an integer :)");
-                sc.next();
-            }
+    static int getInt() { // Integer Input Func
+        try {
+            return sc.nextInt(); // Try to read int from Scanner and return that
         }
-
-        return result;
+        catch (InputMismatchException e) { // Catch Input Mismatch
+            System.out.print("\nError: invalid input. Please enter an integer value\n> "); // Prompt user to enter an actual int
+            sc.next(); // Clear invalid input to avoid looping triggering of the catch block
+            return getInt(); // Recursively call getInt till valid input is found and return that
+        }
     }
 
     static int getBoundedInt(int lower, int upper)
     {
-        boolean loop = true;
-        int result = 0;
-        
-        while (loop)
+        int result = getInt();
+        if (lower < result && result < upper)
         {
-            result = getInt();
-            if (lower < result && result < upper)
-            {
-                loop = false;
-            }
-            else
-            {
-                System.out.printf("Please enter an integer between %d and %d exclusive.\n", lower, upper);
-            }
+            return result;
         }
-
-        return result;
+        else
+        {
+            System.out.printf("Please enter an integer between %d and %d exclusive.\n", lower, upper);
+            return getBoundedInt(lower, upper);
+        }
     }
     
     static String[][] csvReader()
@@ -427,16 +431,16 @@ public class Assignment
         return getBoundedInt(0, menuOptions.length + 1);
     }
 
-    static void bookPrinter(Book[] books)
+    static void bookPrinter(Book[] bookArray)
     {
-        if (books[0] == null)
+        if (bookArray[0] == null)
         {
             System.out.println();
             System.out.println("No Books Found");
         }
         else
         {
-            for (Book book : books)
+            for (Book book : bookArray)
             {
                 System.out.println();
                 System.out.println("Book:");
@@ -592,6 +596,10 @@ public class Assignment
 
     static void addAuthorPrompt(Book book)
     {
+        System.out.println("************************************");
+        System.out.println("             Add Author             ");
+        System.out.println("************************************");
+        System.out.println();
         Author newAuthor = new Author();
         System.out.print("Enter Author First Name: ");
         newAuthor.setFirstName(getInput());
@@ -604,6 +612,8 @@ public class Assignment
         newAuthor.addBook(book);
         book.addAuthor(newAuthor);
         addAuthors(newAuthor);
+        System.out.println("************************************");
+
     }
 
     static void editAuthor(int bookIndex)
@@ -617,6 +627,7 @@ public class Assignment
         boolean loop = true;
 
         System.out.println("List of Authors:");
+        System.out.println();
 
         for (i = 0; i < books[bookIndex].getAuthorCount(); i++)
         {
@@ -624,8 +635,8 @@ public class Assignment
             System.out.printf("%d > Name: %s %s\n", i+1, books[bookIndex].getAuthors()[i].getFirstName(), books[bookIndex].getAuthors()[i].getLastName());
             System.out.printf("%d > Nationality: %s\n", i+1, books[bookIndex].getAuthors()[i].getNationality());
             System.out.printf("%d > Born: %s\n", i+1, books[bookIndex].getAuthors()[i].getBirthYear());
+            System.out.println();
         }
-        System.out.println();
         System.out.print("Select an Author: ");
 
         authorIndex = getBoundedInt(0, books[bookIndex].getAuthorCount() + 1) - 1;
@@ -665,6 +676,9 @@ public class Assignment
 
     static int printAuthorEditMenu()
     {
+        System.out.println("************************************");
+        System.out.println("            Edit Author             ");
+        System.out.println("************************************"); 
         String[] menuOptions = {
             "Change First Name",
             "Change Last Name",
@@ -685,6 +699,9 @@ public class Assignment
     
     static int printBookEditMenu()
     {
+        System.out.println("************************************");
+        System.out.println("             Edit Book              ");
+        System.out.println("************************************"); 
         String[] menuOptions = {
             "Add Author",
             "Remove Author",
@@ -710,16 +727,43 @@ public class Assignment
 
     }
 
+    static void removeAuthorPrompt(int bookIndex)
+    {
+        int i, chosen;
+        for (i = 0; i < books[bookIndex].getAuthorCount(); i++)
+        {
+            System.out.print("Author:\n");
+            System.out.printf(" Name: %s\n", books[bookIndex].getAuthors()[i].toString());
+            System.out.printf(" Nationality: %s\n", books[bookIndex].getAuthors()[i].getNationality());
+            System.out.printf(" Born: %s\n", books[bookIndex].getAuthors()[i].getBirthYear());
+        }
+
+        System.out.println();
+        System.out.print("Select an author to remove: ");
+
+        chosen = getBoundedInt(0, books[bookIndex].getAuthorCount()+1) - 1;
+        books[bookIndex].removeAuthor(chosen);
+
+        for (i = chosen; i < books[bookIndex].getAuthorCount()-1; i++)
+        {
+            books[bookIndex].overwriteAuthor(i, books[bookIndex].getAuthors()[i+1]);
+        }
+
+        books[bookIndex].removeAuthor(i);
+        books[bookIndex].setAuthorCount(books[bookIndex].getAuthorCount()-1);
+    }
+
     static void editBook()
     {
-        int i, j, bookIndex, chosen;
+        int i, j, bookIndex;
         boolean loop = true;
 
         System.out.println("************************************");
-        System.out.println("             Edit Book              ");
+        System.out.println("            Select Book             ");
         System.out.println("************************************"); 
         System.out.println();
         System.out.println("List of Books:");
+        System.out.println();
 
         for (i = 0; i < books.length; i++)
         {
@@ -738,22 +782,25 @@ public class Assignment
                 System.out.printf(" %d >  Nationality: %s\n", i+1, books[i].getAuthors()[j].getNationality());
                 System.out.printf(" %d >  Born: %s\n", i+1, books[i].getAuthors()[j].getBirthYear());
             }
+            System.out.println();
         }
-        System.out.println();
         System.out.print("Select a book: ");
 
         bookIndex = getBoundedInt(0, books.length + 1) - 1;
 
         System.out.println();
+        System.out.println("************************************"); 
 
         while (loop)
         {
+            clearTerm();
             switch (printBookEditMenu()) {
                 case 1:
                     if (books[bookIndex].getAuthorCount() >= 3)
                     {
                         System.out.println("Error: Cannot add more than 3 authors!");
                         System.out.println("       Please delete an author first.");
+                        pauseExecution();
                     }
                     else
                     {
@@ -762,27 +809,7 @@ public class Assignment
                     break;
     
                 case 2:
-                    for (i = 0; i < books[bookIndex].getAuthorCount(); i++)
-                    {
-                        System.out.print("Author:\n");
-                        System.out.printf(" Name: %s\n", books[bookIndex].getAuthors()[i].toString());
-                        System.out.printf(" Nationality: %s\n", books[bookIndex].getAuthors()[i].getNationality());
-                        System.out.printf(" Born: %s\n", books[bookIndex].getAuthors()[i].getBirthYear());
-                    }
-                    
-                    System.out.println();
-                    System.out.print("Select an author to remove: ");
-
-                    chosen = getBoundedInt(0, books[bookIndex].getAuthorCount()+1) - 1;
-                    books[bookIndex].removeAuthor(chosen);
-                    
-                    for (i = chosen; i < books[bookIndex].getAuthorCount()-1; i++)
-                    {
-                        books[bookIndex].overwriteAuthor(i, books[bookIndex].getAuthors()[i+1]);
-                    }
-                    
-                    books[bookIndex].removeAuthor(i);
-                    
+                    removeAuthorPrompt(bookIndex);
                     break;
     
                 case 3:
@@ -887,6 +914,12 @@ public class Assignment
         System.out.println();
     }
     
+    static void pauseExecution() { // Ask user to press a key to continue execution
+        System.out.println("\nPress any key to continue...");
+        sc.nextLine(); // hacky fix to make function work
+        sc.nextLine();
+    }
+
     public static void main(String[] args)
     {
         try
@@ -897,36 +930,51 @@ public class Assignment
             boolean loop = true;
             while (loop)
             {
+                clearTerm();
                 switch (printMenu()) {
                     case 1:
+                        clearTerm();
                         printAllBooks();
+                        pauseExecution();
                         break;
         
                     case 2:
+                        clearTerm();
                         eBooks();
+                        pauseExecution();
                         break;
         
                     case 3:
+                        clearTerm();
                         noneBooks();
+                        pauseExecution();
                         break;
         
                     case 4:
+                        clearTerm();
                         booksByAuthor();
+                        pauseExecution();
                         break;
         
                     case 5:
+                        clearTerm();
                         addBook();
                         writeCSV();
+                        pauseExecution();
                         break;
         
                     case 6:
+                        clearTerm();
                         editBook();
                         writeCSV();
+                        pauseExecution();
                         break;
         
                     case 7:
+                        clearTerm();
                         deleteBook();
                         writeCSV();
+                        pauseExecution();
                         break;
 
                     case 8:
