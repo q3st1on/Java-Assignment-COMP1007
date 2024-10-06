@@ -263,12 +263,13 @@ public class Assignment
 
     static void writeCSV() 
     {
+        System.out.println(filePath);
         FileOutputStream fileStream = null;
         File tempFile = null;
         File outFile = null;
         try 
         {
-            tempFile = File.createTempFile("libraryDataFile", null);
+            tempFile = new File("libraryDataFile.tmp");
             outFile = new File(filePath);
             fileStream = new FileOutputStream(tempFile);
             if (tempFile.exists())
@@ -312,11 +313,6 @@ public class Assignment
                     writeCSVLine(array, fileStream);
                 }
                 fileStream.close();
-
-                if (outFile.exists())
-                {
-                    outFile.delete();
-                }
 
                 tempFile.renameTo(outFile);
             }
@@ -705,7 +701,6 @@ public class Assignment
         for (i = 0; i < books.length; i++)
         {
             System.out.printf("Book %d:\n", i+1);
-            System.out.printf(" %d > %s\n", i+1, books[i]);
             System.out.printf(" %d > Title: %s\n", i+1, books[i].getTitle());
             System.out.printf(" %d > Published: %s\n", i+1, books[i].getYear());
             System.out.printf(" %d > ISBN: %s\n", i+1, books[i].getISBN());
