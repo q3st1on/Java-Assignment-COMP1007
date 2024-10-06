@@ -507,6 +507,7 @@ public class Assignment
         bookPrinter(foundBooks);
 
         System.out.println("************************************");
+        System.out.println();
     }
 
     static void noneBooks()
@@ -537,6 +538,7 @@ public class Assignment
         bookPrinter(foundBooks);
 
         System.out.println("************************************");
+        System.out.println();
     }
 
     static void addBook()
@@ -585,7 +587,7 @@ public class Assignment
         }
 
         System.out.println("************************************");
-
+        System.out.println();
     }
 
     static void addAuthorPrompt(Book book)
@@ -606,15 +608,22 @@ public class Assignment
 
     static void editAuthor(int bookIndex)
     {
+        System.out.println("************************************");
+        System.out.println("            Edit Author             ");
+        System.out.println("************************************");
+        System.out.println();
+
         int i, authorIndex;
         boolean loop = true;
 
-        System.out.println();
         System.out.println("List of Authors:");
 
         for (i = 0; i < books[bookIndex].getAuthorCount(); i++)
         {
-            System.out.printf(" %d > %s\n", i+1, books[bookIndex].getAuthors()[i]);
+            System.out.printf("Author %d:\n", i+1);
+            System.out.printf("%d > Name: %s %s\n", i+1, books[bookIndex].getAuthors()[i].getFirstName(), books[bookIndex].getAuthors()[i].getLastName());
+            System.out.printf("%d > Nationality: %s\n", i+1, books[bookIndex].getAuthors()[i].getNationality());
+            System.out.printf("%d > Born: %s\n", i+1, books[bookIndex].getAuthors()[i].getBirthYear());
         }
         System.out.println();
         System.out.print("Select an Author: ");
@@ -662,15 +671,13 @@ public class Assignment
             "Change Birth Year",
             "Change Nationality",
             "Exit"
-        };
-
-        System.out.println();
-        System.out.println("What would you like to do?");
-        
+        };        
         for (int i = 0; i < menuOptions.length; i++)
         {
             System.out.printf(" %d > %s\n", i+1, menuOptions[i]);
         }
+        System.out.println("************************************");
+
         System.out.print("Your choice: ");
         
         return getBoundedInt(0, menuOptions.length + 1);
@@ -816,6 +823,7 @@ public class Assignment
         }
         
         System.out.println("************************************");
+        System.out.println();
     }
 
     static void deleteBook()
@@ -864,6 +872,7 @@ public class Assignment
         books = newBooks;
 
         System.out.println("************************************");
+        System.out.println();
     }
 
     static void printAllBooks()
@@ -875,6 +884,7 @@ public class Assignment
         System.out.println("List of Books:");
         bookPrinter(books);
         System.out.println("************************************");
+        System.out.println();
     }
     
     public static void main(String[] args)
