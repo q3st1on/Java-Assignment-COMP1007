@@ -114,7 +114,7 @@ public class Assignment
     static Book[] books = new Book[1];
     static Author[] authors = new Author[1];
     static String filePath = "StartingDataFile.csv";
-
+    static String[] csvHeader;
     
     static int getInt()
     {
@@ -158,8 +158,9 @@ public class Assignment
         return result;
     }
     
-    static String[][] csvReader(String csvPath)
+    static String[][] csvReader()
     {
+        File file = null;
         FileInputStream fs = null;
         InputStreamReader isr;
         BufferedReader br;
@@ -169,12 +170,14 @@ public class Assignment
         
         try
         {
-            fs = new FileInputStream(csvPath);
+            file = new File(filePath);
+            fs = new FileInputStream(file);
             isr = new InputStreamReader(fs);
             br = new BufferedReader(isr);
             line = br.readLine();
             while(line != null)
             {
+                filePath = file.getAbsolutePath();
                 if (empty)
                 {
                     Data[0] = line.split(",");
@@ -246,25 +249,107 @@ public class Assignment
         }
     }
 
+    static void writeCSVLine(String[] data, FileOutputStream file) throws IOException
+    {
+        int i;
+        for (i = 0; i < (data.length - 1); i++)
+        {
+            file.write(data[i].getBytes());
+            file.write(",".getBytes());
+        }
+        file.write(data[data.length-1].getBytes());
+        file.write("\n".getBytes());
+    }
+
     static void writeCSV() 
     {
+        FileOutputStream fileStream = null;
+        File tempFile = null;
+        File outFile = null;
         try 
         {
-            File tempFile = File.createTempFile("libraryDataFile", null);
-            for (Book book : books)
+            tempFile = File.createTempFile("libraryDataFile", null);
+            outFile = new File(filePath);
+            fileStream = new FileOutputStream(tempFile);
+            if (tempFile.exists())
             {
-    
+                writeCSVLine(csvHeader, fileStream);
+                
+                for (Book book : books)
+                {
+                    String[] array = new String[csvHeader.length];
+                    array[0] = book.getTitle();
+                    
+                    for (int i = 0; i < 3; i++)
+                    {
+                        if (i < book.getAuthorCount())
+                        {
+                            array[1+(i*4)] = book.getAuthors()[i].getLastName();
+                            array[2+(i*4)] = book.getAuthors()[i].getFirstName();
+                            array[3+(i*4)] = book.getAuthors()[i].getNationality();
+                            array[4+(i*4)] = book.getAuthors()[i].getBirthYear();
+                        }
+                        else
+                        {
+                            array[1+(i*4)] = "";
+                            array[2+(i*4)] = "";
+                            array[3+(i*4)] = "";
+                            array[4+(i*4)] = "";
+                        }
+                    }
+                    array[13] = book.getYear();
+                    array[14] = book.getISBN();
+                    if (book.isEbook())
+                    {
+                        array[15] = "TRUE";
+                    }
+                    else
+                    {
+                        array[15] = "FALSE";
+                    }
+                    array[16] = String.valueOf(book.getEdition());
+
+                    writeCSVLine(array, fileStream);
+                }
+                fileStream.close();
+
+                if (outFile.exists())
+                {
+                    outFile.delete();
+                }
+
+                tempFile.renameTo(outFile);
             }
+            else
+            {
+                throw new IOException("Temp file could not be created at: " + tempFile.getAbsolutePath());
+            }
+
         }
         catch (IOException e)
         {
+            if (fileStream != null)
+            {
+                try
+                {
+                    fileStream.close();
+                }
+                catch (IOException e2)
+                {
+                    System.err.println("Error while trying to close file Stream: "+ e2.getMessage());
+                }
+            }
             e.printStackTrace();
         }
+
+
 
     }
     
     static void genBooks(String[][]CSVData)
     {
+        csvHeader = CSVData[0];
+
         for (int i = 1; i < CSVData.length; i++)
         {
             Book newBook = new Book();
@@ -724,7 +809,7 @@ public class Assignment
     {
         try
         {
-            String[][] CSVData = csvReader(filePath);
+            String[][] CSVData = csvReader();
             genBooks(CSVData);
 
             boolean loop = true;
