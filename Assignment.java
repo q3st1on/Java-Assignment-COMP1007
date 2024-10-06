@@ -116,6 +116,20 @@ public class Assignment
     static String filePath = "StartingDataFile.csv";
     static String[] csvHeader;
     
+    private static String getInput() {
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+  
+        System.out.flush();
+  
+        try
+        {
+            return input.readLine();
+        } catch (Exception e)
+        {
+          return "Error: " + e.getMessage();
+        }
+    }
+
     static int getInt()
     {
         boolean loop = true;
@@ -263,7 +277,6 @@ public class Assignment
 
     static void writeCSV() 
     {
-        System.out.println(filePath);
         FileOutputStream fileStream = null;
         File tempFile = null;
         File outFile = null;
@@ -395,6 +408,7 @@ public class Assignment
             "View an author\'s Books",
             "Add Book",
             "Edit Book",
+            "Delete Book",
             "Exit"
         };
 
@@ -535,15 +549,15 @@ public class Assignment
         Book newBook = new Book();
 
         System.out.print("Enter Book Title: ");
-        newBook.setTitle(sc.next());
+        newBook.setTitle(getInput());
         System.out.print("Enter Book Year: ");
         newBook.setYear(String.valueOf(getInt()));
         System.out.print("Enter Book ISBN: ");
-        newBook.setISBN(sc.next());
+        newBook.setISBN(getInput());
         System.out.print("Enter Book Edition: ");
         newBook.setEdition(getInt());
-        System.out.print("Is Book an eBook? ");
-        String reply = sc.next().toLowerCase();
+        System.out.print("Is Book an eBook (y/n)? ");
+        String reply = getInput().toLowerCase();
         if (reply.equals("y") || reply.equals("yes") || reply.equals("t") || reply.equals("true"))
         {
             newBook.setEbook(true);
@@ -576,11 +590,11 @@ public class Assignment
     {
         Author newAuthor = new Author();
         System.out.print("Enter Author First Name: ");
-        newAuthor.setFirstName(sc.next());
+        newAuthor.setFirstName(getInput());
         System.out.print("Enter Author Last Name: ");
-        newAuthor.setLastName(sc.next());
+        newAuthor.setLastName(getInput());
         System.out.print("Enter Author Nationality: ");
-        newAuthor.setNationality(sc.next());
+        newAuthor.setNationality(getInput());
         System.out.print("Enter Author Birth Year: ");
         newAuthor.setBirthYear(String.valueOf(getInt()));
         newAuthor.addBook(book);
@@ -610,12 +624,12 @@ public class Assignment
             switch (printAuthorEditMenu()) {
                 case 1:
                     System.out.print("Enter new first name: ");
-                    books[bookIndex].getAuthors()[authorIndex].setFirstName(sc.next());
+                    books[bookIndex].getAuthors()[authorIndex].setFirstName(getInput());
                     break;
     
                 case 2:
                     System.out.print("Enter new last name: ");
-                    books[bookIndex].getAuthors()[authorIndex].setLastName(sc.next());
+                    books[bookIndex].getAuthors()[authorIndex].setLastName(getInput());
                     break;
     
                 case 3:
@@ -625,7 +639,7 @@ public class Assignment
     
                 case 4:
                     System.out.print("Enter new nationality: ");
-                    books[bookIndex].getAuthors()[authorIndex].setNationality(sc.next());
+                    books[bookIndex].getAuthors()[authorIndex].setNationality(getInput());
                     break;
     
                 case 5:
@@ -768,7 +782,7 @@ public class Assignment
     
                 case 4:
                     System.out.print("Enter new title: ");
-                    books[bookIndex].setTitle(sc.next());
+                    books[bookIndex].setTitle(getInput());
                     break;
     
                 case 5:
@@ -783,7 +797,7 @@ public class Assignment
     
                 case 7:
                     System.out.print("Enter new ISBN: ");
-                    books[bookIndex].setISBN(sc.next());
+                    books[bookIndex].setISBN(getInput());
                     break;
                     
                 case 8:
@@ -799,6 +813,54 @@ public class Assignment
             }
         }
     }
+
+    static void deleteBook()
+    {
+        int i, j, bookIndex, chosen;
+        boolean loop = true;
+
+        System.out.println("************************************");
+        System.out.println("            Delete Book             ");
+        System.out.println("************************************"); 
+        System.out.println();
+        System.out.println("List of Books:");
+
+        for (i = 0; i < books.length; i++)
+        {
+            System.out.printf("Book %d:\n", i+1);
+            System.out.printf(" %d > Title: %s\n", i+1, books[i].getTitle());
+            System.out.printf(" %d > Published: %s\n", i+1, books[i].getYear());
+            System.out.printf(" %d > ISBN: %s\n", i+1, books[i].getISBN());
+            System.out.printf(" %d > eBook: %b\n", i+1, books[i].isEbook());
+            System.out.printf(" %d > Edition: %d\n", i+1, books[i].getEdition());
+            System.out.printf(" %d > Authors: %d\n", i+1, books[i].getAuthorCount());
+
+            for (j = 0; j < books[i].getAuthorCount(); j++)
+            {
+                System.out.printf(" %d > Author:\n", i+1);
+                System.out.printf(" %d >  Name: %s %s\n", i+1, books[i].getAuthors()[j].getFirstName(), books[i].getAuthors()[j].getLastName());
+                System.out.printf(" %d >  Nationality: %s\n", i+1, books[i].getAuthors()[j].getNationality());
+                System.out.printf(" %d >  Born: %s\n", i+1, books[i].getAuthors()[j].getBirthYear());
+            }
+        }
+        System.out.println();
+        System.out.print("Select a book to delete: ");
+
+        bookIndex = getBoundedInt(0, books.length + 1) - 1;
+
+        books[bookIndex] = null;
+        
+        for (i = bookIndex; i < books.length-1; i++)
+        {
+            books[i] = books[i+1];
+        }
+        
+        books[i] = null;
+
+        Book[] newBooks = Arrays.copyOf(books, books.length-1);
+        books = newBooks;
+    }
+
     
     public static void main(String[] args)
     {
@@ -838,6 +900,11 @@ public class Assignment
                         break;
         
                     case 7:
+                        deleteBook();
+                        writeCSV();
+                        break;
+
+                    case 8:
                         loop = false;
                         break;
                         
