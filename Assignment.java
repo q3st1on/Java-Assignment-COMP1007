@@ -584,6 +584,8 @@ public class Assignment
             books[books.length-1] = newBook;
         }
 
+        System.out.println("************************************");
+
     }
 
     static void addAuthorPrompt(Book book)
@@ -812,12 +814,13 @@ public class Assignment
                     System.out.println("Please choose a valid menu option (enter 1-9)");
             }
         }
+        
+        System.out.println("************************************");
     }
 
     static void deleteBook()
     {
-        int i, j, bookIndex, chosen;
-        boolean loop = true;
+        int i, j, bookIndex;
 
         System.out.println("************************************");
         System.out.println("            Delete Book             ");
@@ -859,8 +862,20 @@ public class Assignment
 
         Book[] newBooks = Arrays.copyOf(books, books.length-1);
         books = newBooks;
+
+        System.out.println("************************************");
     }
 
+    static void printAllBooks()
+    {
+        System.out.println("************************************");
+        System.out.println("             All Books              ");
+        System.out.println("************************************"); 
+        System.out.println();
+        System.out.println("List of Books:");
+        bookPrinter(books);
+        System.out.println("************************************");
+    }
     
     public static void main(String[] args)
     {
@@ -874,7 +889,7 @@ public class Assignment
             {
                 switch (printMenu()) {
                     case 1:
-                        bookPrinter(books);
+                        printAllBooks();
                         break;
         
                     case 2:
