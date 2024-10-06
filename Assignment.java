@@ -113,7 +113,7 @@ public class Assignment
 
     static Book[] books = new Book[1];
     static Author[] authors = new Author[1];
-static String filePath = ;
+    static String filePath = "StartingDataFile.csv";
 
     
     static int getInt()
@@ -246,11 +246,21 @@ static String filePath = ;
         }
     }
 
-static void writeCSV() 
+    static void writeCSV() 
     {
-for (Book book : books)
-{
-}
+        try 
+        {
+            File tempFile = File.createTempFile("libraryDataFile", null);
+            for (Book book : books)
+            {
+    
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
     }
     
     static void genBooks(String[][]CSVData)
@@ -714,7 +724,7 @@ for (Book book : books)
     {
         try
         {
-            String[][] CSVData =  csvReader("StartingDataFile.csv");
+            String[][] CSVData = csvReader(filePath);
             genBooks(CSVData);
 
             boolean loop = true;
