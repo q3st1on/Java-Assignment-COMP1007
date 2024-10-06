@@ -602,18 +602,25 @@ public class Assignment
         System.out.println("             Add Author             ");
         System.out.println("************************************");
         System.out.println();
+
         Author newAuthor = new Author();
         System.out.print("Enter Author First Name: ");
         newAuthor.setFirstName(getInput());
+
         System.out.print("Enter Author Last Name: ");
         newAuthor.setLastName(getInput());
+
         System.out.print("Enter Author Nationality: ");
         newAuthor.setNationality(getInput());
+
         System.out.print("Enter Author Birth Year: ");
         newAuthor.setBirthYear(String.valueOf(getInt()));
+
         newAuthor.addBook(book);
         book.addAuthor(newAuthor);
+
         addAuthors(newAuthor);
+        
         System.out.println("************************************");
 
     }
