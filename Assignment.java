@@ -175,7 +175,7 @@ public class Assignment
         }
         else
         {
-            System.out.printf("Please enter an integer between %d and %d exclusive.\n", lower, upper);
+            System.err.printf("Please enter an integer between %d and %d exclusive.\n", lower, upper);
             return getBoundedInt(lower, upper);
         }
     }
@@ -227,7 +227,7 @@ public class Assignment
                     System.err.println("Error while trying to close file Stream: "+ e2.getMessage());
                 }
             }
-            System.out.println("Error in file reading: " + e.getMessage());
+            System.err.println("Error in file reading: " + e.getMessage());
         }
         return Data;
     }
@@ -671,7 +671,8 @@ public class Assignment
                     break;
 
                 default:
-                    System.out.println("Please choose a valid menu option (enter 1-5)");
+                    System.err.println("Please choose a valid menu option (enter 1-5)");
+                    pauseExecution();
             }
         }
     }
@@ -847,7 +848,8 @@ public class Assignment
                     break;
 
                 default:
-                    System.out.println("Please choose a valid menu option (enter 1-9)");
+                    System.err.println("Please choose a valid menu option (enter 1-9)");
+                    pauseExecution();
             }
         }
         
@@ -984,7 +986,7 @@ public class Assignment
                         break;
                         
                     default:
-                        System.out.println("Please choose a valid menu option (enter 1-7)");
+                        System.err.println("Please choose a valid menu option (enter 1-7)");
                         pauseExecution();
                 }
             }
