@@ -132,11 +132,6 @@ public class Assignment
     static Author[] authors = new Author[1];
     static String filePath = "StartingDataFile.csv";
     static String[] csvHeader;
-    
-    static void clearTerm() { // Clear whole terminal
-        System.out.print("\033[2J"); // ANSI code to erase whole terminal
-        System.out.print("\033[1;1H"); // ANSI code to move cursor to top left of terminal
-    }
 
     private static String getInput() {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
@@ -424,7 +419,7 @@ public class Assignment
         
         for (int i = 0; i < menuOptions.length; i++)
         {
-            System.out.printf(" %d > %s\n", i+1, menuOptions[i]);
+            System.out.printf("%2d > %s\n", i+1, menuOptions[i]);
         }
 
         System.out.println("************************************");
@@ -451,7 +446,6 @@ public class Assignment
                 System.out.printf(" ISBN: %s\n", book.getISBN());
                 System.out.printf(" eBook: %b\n", book.isEbook());
                 System.out.printf(" Edition: %d\n", book.getEdition());
-                System.out.printf(" Authors: %d\n", book.getAuthorCount());
 
                 for (int i = 0; i < book.getAuthorCount(); i++)
                 {
@@ -474,7 +468,7 @@ public class Assignment
 
         for (int i = 0; i < authors.length; i++)
         {
-            System.out.printf(" %d > %s\n", i+1, authors[i]);
+            System.out.printf("%2d > %s\n", i+1, authors[i]);
         }
         System.out.println();
         System.out.print("Select an Author: ");
@@ -641,9 +635,9 @@ public class Assignment
         for (i = 0; i < books[bookIndex].getAuthorCount(); i++)
         {
             System.out.printf("Author %d:\n", i+1);
-            System.out.printf("%d > Name: %s %s\n", i+1, books[bookIndex].getAuthors()[i].getFirstName(), books[bookIndex].getAuthors()[i].getLastName());
-            System.out.printf("%d > Nationality: %s\n", i+1, books[bookIndex].getAuthors()[i].getNationality());
-            System.out.printf("%d > Born: %s\n", i+1, books[bookIndex].getAuthors()[i].getBirthYear());
+            System.out.printf("%2d > Name: %s %s\n", i+1, books[bookIndex].getAuthors()[i].getFirstName(), books[bookIndex].getAuthors()[i].getLastName());
+            System.out.printf("%2d > Nationality: %s\n", i+1, books[bookIndex].getAuthors()[i].getNationality());
+            System.out.printf("%2d > Born: %s\n", i+1, books[bookIndex].getAuthors()[i].getBirthYear());
             System.out.println();
         }
         System.out.print("Select an Author: ");
@@ -652,7 +646,7 @@ public class Assignment
 
         while (loop)
         {
-            switch (printAuthorEditMenu()) {
+            switch (printAuthorEditMenu(books[bookIndex].getAuthors()[authorIndex])) {
                 case 1:
                     System.out.print("Enter new first name: ");
                     books[bookIndex].getAuthors()[authorIndex].setFirstName(getInput());
@@ -679,12 +673,12 @@ public class Assignment
 
                 default:
                     System.err.println("Please choose a valid menu option (enter 1-5)");
-                    pauseExecution();
+                    
             }
         }
     }
 
-    static int printAuthorEditMenu()
+    static int printAuthorEditMenu(Author author)
     {
         System.out.println("************************************");
         System.out.println("            Edit Author             ");
@@ -695,10 +689,21 @@ public class Assignment
             "Change Birth Year",
             "Change Nationality",
             "Exit"
-        };        
+        };
+
+        System.out.println();
+        
+        System.out.printf("Author:\n");
+        System.out.printf(" Name: %s %s\n",author.getFirstName(), author.getLastName());
+        System.out.printf(" Nationality: %s\n", author.getNationality());
+        System.out.printf(" Born: %s\n", author.getBirthYear());
+
+        System.out.println();
+        System.out.println("What would you like to do?");
+
         for (int i = 0; i < menuOptions.length; i++)
         {
-            System.out.printf(" %d > %s\n", i+1, menuOptions[i]);
+            System.out.printf("%2d > %s\n", i+1, menuOptions[i]);
         }
         System.out.println("************************************");
 
@@ -707,7 +712,7 @@ public class Assignment
         return getBoundedInt(0, menuOptions.length + 1);
     }
     
-    static int printBookEditMenu()
+    static int printBookEditMenu(Book book)
     {
         System.out.println("************************************");
         System.out.println("             Edit Book              ");
@@ -725,11 +730,27 @@ public class Assignment
         };
 
         System.out.println();
+
+        System.out.printf("Title: %s\n", book.getTitle());
+        System.out.printf("Published: %s\n", book.getYear());
+        System.out.printf("ISBN: %s\n", book.getISBN());
+        System.out.printf("eBook: %b\n", book.isEbook());
+        System.out.printf("Edition: %d\n", book.getEdition());
+
+        for (int i = 0; i < book.getAuthorCount(); i++)
+        {
+            System.out.printf("Author:\n");
+            System.out.printf(" Name: %s %s\n", book.getAuthors()[i].getFirstName(), book.getAuthors()[i].getLastName());
+            System.out.printf(" Nationality: %s\n", book.getAuthors()[i].getNationality());
+            System.out.printf(" Born: %s\n", book.getAuthors()[i].getBirthYear());
+        }
+
+        System.out.println();
         System.out.println("What would you like to do?");
         
         for (int i = 0; i < menuOptions.length; i++)
         {
-            System.out.printf(" %d > %s\n", i+1, menuOptions[i]);
+            System.out.printf("%2d > %s\n", i+1, menuOptions[i]);
         }
         System.out.print("Your choice: ");
         
@@ -742,10 +763,10 @@ public class Assignment
         int i, chosen;
         for (i = 0; i < books[bookIndex].getAuthorCount(); i++)
         {
-            System.out.print("Author:\n");
-            System.out.printf(" Name: %s\n", books[bookIndex].getAuthors()[i].toString());
-            System.out.printf(" Nationality: %s\n", books[bookIndex].getAuthors()[i].getNationality());
-            System.out.printf(" Born: %s\n", books[bookIndex].getAuthors()[i].getBirthYear());
+            System.out.printf("Author %d:\n", i+1);
+            System.out.printf("%2d > Name: %s\n", i+1, books[bookIndex].getAuthors()[i].toString());
+            System.out.printf("%2d > Nationality: %s\n", i+1, books[bookIndex].getAuthors()[i].getNationality());
+            System.out.printf("%2d > Born: %s\n", i+1, books[bookIndex].getAuthors()[i].getBirthYear());
         }
 
         System.out.println();
@@ -778,19 +799,18 @@ public class Assignment
         for (i = 0; i < books.length; i++)
         {
             System.out.printf("Book %d:\n", i+1);
-            System.out.printf(" %d > Title: %s\n", i+1, books[i].getTitle());
-            System.out.printf(" %d > Published: %s\n", i+1, books[i].getYear());
-            System.out.printf(" %d > ISBN: %s\n", i+1, books[i].getISBN());
-            System.out.printf(" %d > eBook: %b\n", i+1, books[i].isEbook());
-            System.out.printf(" %d > Edition: %d\n", i+1, books[i].getEdition());
-            System.out.printf(" %d > Authors: %d\n", i+1, books[i].getAuthorCount());
+            System.out.printf("%2d > Title: %s\n", i+1, books[i].getTitle());
+            System.out.printf("%2d > Published: %s\n", i+1, books[i].getYear());
+            System.out.printf("%2d > ISBN: %s\n", i+1, books[i].getISBN());
+            System.out.printf("%2d > eBook: %b\n", i+1, books[i].isEbook());
+            System.out.printf("%2d > Edition: %d\n", i+1, books[i].getEdition());
 
             for (j = 0; j < books[i].getAuthorCount(); j++)
             {
-                System.out.printf(" %d > Author:\n", i+1);
-                System.out.printf(" %d >  Name: %s %s\n", i+1, books[i].getAuthors()[j].getFirstName(), books[i].getAuthors()[j].getLastName());
-                System.out.printf(" %d >  Nationality: %s\n", i+1, books[i].getAuthors()[j].getNationality());
-                System.out.printf(" %d >  Born: %s\n", i+1, books[i].getAuthors()[j].getBirthYear());
+                System.out.printf("%2d > Author:\n", i+1);
+                System.out.printf("%2d >  Name: %s %s\n", i+1, books[i].getAuthors()[j].getFirstName(), books[i].getAuthors()[j].getLastName());
+                System.out.printf("%2d >  Nationality: %s\n", i+1, books[i].getAuthors()[j].getNationality());
+                System.out.printf("%2d >  Born: %s\n", i+1, books[i].getAuthors()[j].getBirthYear());
             }
             System.out.println();
         }
@@ -803,14 +823,14 @@ public class Assignment
 
         while (loop)
         {
-            clearTerm();
-            switch (printBookEditMenu()) {
+            
+            switch (printBookEditMenu(books[bookIndex])) {
                 case 1:
                     if (books[bookIndex].getAuthorCount() >= 3)
                     {
                         System.out.println("Error: Cannot add more than 3 authors!");
                         System.out.println("       Please delete an author first.");
-                        pauseExecution();
+                        
                     }
                     else
                     {
@@ -856,7 +876,7 @@ public class Assignment
 
                 default:
                     System.err.println("Please choose a valid menu option (enter 1-9)");
-                    pauseExecution();
+                    
             }
         }
         
@@ -877,19 +897,18 @@ public class Assignment
         for (i = 0; i < books.length; i++)
         {
             System.out.printf("Book %d:\n", i+1);
-            System.out.printf(" %d > Title: %s\n", i+1, books[i].getTitle());
-            System.out.printf(" %d > Published: %s\n", i+1, books[i].getYear());
-            System.out.printf(" %d > ISBN: %s\n", i+1, books[i].getISBN());
-            System.out.printf(" %d > eBook: %b\n", i+1, books[i].isEbook());
-            System.out.printf(" %d > Edition: %d\n", i+1, books[i].getEdition());
-            System.out.printf(" %d > Authors: %d\n", i+1, books[i].getAuthorCount());
+            System.out.printf("%2d > Title: %s\n", i+1, books[i].getTitle());
+            System.out.printf("%2d > Published: %s\n", i+1, books[i].getYear());
+            System.out.printf("%2d > ISBN: %s\n", i+1, books[i].getISBN());
+            System.out.printf("%2d > eBook: %b\n", i+1, books[i].isEbook());
+            System.out.printf("%2d > Edition: %d\n", i+1, books[i].getEdition());
 
             for (j = 0; j < books[i].getAuthorCount(); j++)
             {
-                System.out.printf(" %d > Author:\n", i+1);
-                System.out.printf(" %d >  Name: %s %s\n", i+1, books[i].getAuthors()[j].getFirstName(), books[i].getAuthors()[j].getLastName());
-                System.out.printf(" %d >  Nationality: %s\n", i+1, books[i].getAuthors()[j].getNationality());
-                System.out.printf(" %d >  Born: %s\n", i+1, books[i].getAuthors()[j].getBirthYear());
+                System.out.printf("%2d > Author:\n", i+1);
+                System.out.printf("%2d >  Name: %s %s\n", i+1, books[i].getAuthors()[j].getFirstName(), books[i].getAuthors()[j].getLastName());
+                System.out.printf("%2d >  Nationality: %s\n", i+1, books[i].getAuthors()[j].getNationality());
+                System.out.printf("%2d >  Born: %s\n", i+1, books[i].getAuthors()[j].getBirthYear());
             }
         }
         System.out.println();
@@ -924,12 +943,6 @@ public class Assignment
         System.out.println("************************************");
         System.out.println();
     }
-    
-    static void pauseExecution() { // Ask user to press a key to continue execution
-        System.out.println("\nPress any key to continue...");
-        sc.nextLine(); // hacky fix to make function work
-        sc.nextLine();
-    }
 
     public static void main(String[] args)
     {
@@ -941,51 +954,36 @@ public class Assignment
             boolean loop = true;
             while (loop)
             {
-                clearTerm();
                 switch (printMenu()) {
                     case 1:
-                        clearTerm();
                         printAllBooks();
-                        pauseExecution();
                         break;
         
                     case 2:
-                        clearTerm();
                         eBooks();
-                        pauseExecution();
                         break;
         
                     case 3:
-                        clearTerm();
                         noneBooks();
-                        pauseExecution();
                         break;
         
                     case 4:
-                        clearTerm();
                         booksByAuthor();
-                        pauseExecution();
                         break;
         
                     case 5:
-                        clearTerm();
                         addBook();
                         writeCSV();
-                        pauseExecution();
                         break;
         
                     case 6:
-                        clearTerm();
                         editBook();
                         writeCSV();
-                        pauseExecution();
                         break;
         
                     case 7:
-                        clearTerm();
                         deleteBook();
                         writeCSV();
-                        pauseExecution();
                         break;
 
                     case 8:
@@ -994,7 +992,7 @@ public class Assignment
                         
                     default:
                         System.err.println("Please choose a valid menu option (enter 1-7)");
-                        pauseExecution();
+                        
                 }
             }
             writeCSV();
