@@ -1,6 +1,13 @@
 import java.io.*;
 import java.util.*;
 
+
+/*****************************************************
+ * Author : Orlando Morris-Johnson (22222598)        *
+ * Purpose: To store and manage information about    *
+ *          authors.                                 * 
+ * Date   : 08/10/2024                               *
+ *****************************************************/
 class Author
 {
     private String familyName;
@@ -55,6 +62,13 @@ class Author
     }
 }
 
+
+/*****************************************************
+ * Author : Orlando Morris-Johnson (22222598)        *
+ * Purpose: To store and manage information about    *
+ *          books.                                   * 
+ * Date   : 08/10/2024                               *
+ *****************************************************/
 class Book
 {
     private Author[] authors = new Author[3];
@@ -124,6 +138,13 @@ class Book
     }
 }
 
+
+/*****************************************************
+ * Author : Orlando Morris-Johnson (22222598)        *
+ * Purpose: To store and manage information about    *
+ *          authors.                                 * 
+ * Date   : 08/10/2024                               *
+ *****************************************************/
 public class Assignment
 {
     static Scanner sc = new Scanner(System.in);
@@ -133,9 +154,17 @@ public class Assignment
     static String filePath = "StartingDataFile.csv";
     static String[] csvHeader;
 
+
+    /*****************************************************
+     * Name   : getInput                                 *
+     * Date   : 08/10/2024                               *
+     * Import : None                                     * 
+     * Export : val (String)                             *
+     * Purpose: To get a string entered by the user      *
+     *          even if it contains spaces               * 
+     *****************************************************/
     private static String getInput() {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-  
         System.out.flush();
   
         try
@@ -147,6 +176,13 @@ public class Assignment
         }
     }
 
+    /*****************************************************
+     * Name   : getInt                                   *
+     * Date   : 08/10/2024                               *
+     * Import : None                                     * 
+     * Export : val (int)                                *
+     * Purpose: To get an integer entered by the user    *
+     *****************************************************/
     static int getInt() // Integer Input Func
     { 
         try
@@ -161,6 +197,14 @@ public class Assignment
         }
     }
 
+    /*****************************************************
+     * Name   : getBoundedInt                            *
+     * Date   : 08/10/2024                               *
+     * Import : lower (int), upper (int)                 * 
+     * Export : val (String)                             *
+     * Purpose: To get an integer entered by the user    * 
+     *          that falls between lower and upper       * 
+     *****************************************************/
     static int getBoundedInt(int lower, int upper)
     {
         int result = getInt();
@@ -175,6 +219,14 @@ public class Assignment
         }
     }
     
+    /*****************************************************
+     * Name   : csvReader                                *
+     * Date   : 08/10/2024                               *
+     * Import : None                                     * 
+     * Export : val (String[][])                         *
+     * Purpose: To read in the contents of a csv file    * 
+     *          and return them as a 2d string array     * 
+     *****************************************************/
     static String[][] csvReader()
     {
         File file = null;
@@ -227,6 +279,16 @@ public class Assignment
         return Data;
     }
 
+    /*******************************************************
+     * Name   : addAuthors                               *
+     * Date   : 08/10/2024                               *
+     * Import : newAuthor (Author)                       * 
+     * Export : None                                     *
+     * Purpose: To take a new author, if unique to add   *
+     *          them to the array of authors and if not  *
+     *          unique to add the books they have made   *
+     *          to the existing entry for that author    * 
+     *******************************************************/
     static void addAuthors(Author newAuthor)
     {
         if (authors[0] == null)
@@ -266,6 +328,14 @@ public class Assignment
         }
     }
 
+    /*****************************************************
+     * Name   : writeCSVLine                             *
+     * Date   : 08/10/2024                               *
+     * Import : data (String[]), file (FileOutputStream) *
+     * Export : None                                     *
+     * Purpose: To take an array of strings and write it *
+     *          to a line of a CSV file                  *
+     *****************************************************/
     static void writeCSVLine(String[] data, FileOutputStream file) throws IOException
     {
         int i;
@@ -278,6 +348,14 @@ public class Assignment
         file.write("\n".getBytes());
     }
 
+    /*****************************************************
+     * Name   : writeCSV                                 *
+     * Date   : 08/10/2024                               *
+     * Import : None                                     *
+     * Export : None                                     *
+     * Purpose: To write out the library data to the CSV *
+     *          data file                                *
+     *****************************************************/
     static void writeCSV() 
     {
         FileOutputStream fileStream = null;
@@ -356,6 +434,15 @@ public class Assignment
         }
     }
     
+    /*****************************************************
+     * Name   : genBooks                                 *
+     * Date   : 08/10/2024                               *
+     * Import : CSVData (String[])                       *
+     * Export : None                                     *
+     * Purpose: To take a 2d array of a ibrary data file *
+     *          and create the relevant Author and Book  *
+     *          object instanced                         *
+     *****************************************************/
     static void genBooks(String[][]CSVData)
     {
         csvHeader = CSVData[0];
@@ -399,7 +486,14 @@ public class Assignment
             }
         }
     }
-
+    /*****************************************************
+     * Name   : printMenu                                *
+     * Date   : 08/10/2024                               *
+     * Import : None                                     *
+     * Export : val (int)                                *
+     * Purpose: To print out the main library menu and   *
+     *          get the users selected menu option       *
+     *****************************************************/
     static int printMenu()
     {
         String[] menuOptions = {
@@ -428,6 +522,14 @@ public class Assignment
         return getBoundedInt(0, menuOptions.length + 1);
     }
 
+    /*****************************************************
+     * Name   : bookPrinter                              *
+     * Date   : 08/10/2024                               *
+     * Import : bookArray (Book[])                       *
+     * Export : None                                     *
+     * Purpose: To print out the data of each book in an *
+     *          array of books                           *
+     *****************************************************/
     static void bookPrinter(Book[] bookArray)
     {
         if (bookArray[0] == null)
@@ -458,6 +560,14 @@ public class Assignment
         }
     }
 
+    /*****************************************************
+     * Name   : booksByAuthor                            *
+     * Date   : 08/10/2024                               *
+     * Import : None                                     *
+     * Export : None                                     *
+     * Purpose: To display the books by an author the    *
+     *          user selects                             *
+     *****************************************************/
     static void booksByAuthor()
     {
         System.out.println("************************************");
@@ -510,6 +620,13 @@ public class Assignment
         System.out.println();
     }
 
+    /*****************************************************
+     * Name   : noneBooks                                *
+     * Date   : 08/10/2024                               *
+     * Import : None                                     *
+     * Export : None                                     *
+     * Purpose: To display all books which aren't ebooks *
+     *****************************************************/
     static void noneBooks()
     {
         System.out.println("************************************");
@@ -830,7 +947,6 @@ public class Assignment
                     {
                         System.out.println("Error: Cannot add more than 3 authors!");
                         System.out.println("       Please delete an author first.");
-                        
                     }
                     else
                     {
@@ -996,9 +1112,11 @@ public class Assignment
                 }
             }
             writeCSV();
+            sc.close();
         }
         catch (Exception e)
         {
+            sc.close();
             e.printStackTrace();
         }
     }
