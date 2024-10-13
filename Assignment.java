@@ -583,27 +583,39 @@ public class Assignment
     static void pruneAuthors(Author checkAuthor)
     {
         int checkAuthorHash = checkAuthor.hashCode();
-        
-        for (Author author : authors)
+        int i;
+        for (i = 0; i < authors.length; i++)
         {
-            if (author.hashCode() == checkAuthorHash)
+            if (authors[i].hashCode() == checkAuthorHash)
             {
-                if (!author.equals(checkAuthor))
+                if (!authors[i].equals(checkAuthor))
                 {
-                    for (Book book : checkAuthor.getBooks())
+                    if (checkAuthor.getBooks() == authors[i].getBooks())
                     {
-                        author.addBook(book);
-                        for (int i = 0; i < book.getAuthorCount(); i++)
-                        {
-                            if (book.getAuthors()[i] == checkAuthor)
-                            {
-                                book.overwriteAuthor(i, author);
-                            }
-                        }
+                        deleteAuthor(i);
                     }
                 }
             }
         }
+    }
+
+    static void deleteAuthor(int authorIndex)
+    {
+        int i;
+
+        // Overwrite author at chosen position with null
+        authors[authorIndex] = null;
+
+        for (i = authorIndex; i < authors.length; i++)
+        {
+            // For each author from the chosen position to the final author
+            // overwrite the author with the next author in the array
+            
+        }
+
+
+        authors[i] = null;
+
     }
     
     /*****************************************************
