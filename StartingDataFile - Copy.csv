@@ -1,4 +1,4 @@
-title,title,firstNameOne,nationalityOne,birthYearOne,familyNameTwo,firstNameTwo,nationalityTwo,birthYearTwo,familyNameThree,firstNameThree,nationalityThree,birthYearThree,year,isbn,ebook,edition
+title,firstNameOne,nationalityOne,birthYearOne,familyNameTwo,firstNameTwo,nationalityTwo,birthYearTwo,familyNameThree,firstNameThree,nationalityThree,birthYearThree,year,isbn,ebook,edition
 COMP1007 for Everyone,McMeekin,David,Aust,1990,Brower,Arlen,USA,1995,Liang,Antoni,France,1998,2024,1234567809,TRUE,1
 UCP for All Who Desire,Brower,Arlen,USA,1995,McMeekin,David,Aust,1990,Maxville,Valerie,Aust,1993,2023,9876543201,TRUE,1
 FOP for the Rest of Us,Maxville,Valerie,Aust,1993,Brower,Arlen,USA,1995,,,,,2019,1987654327,FALSE,2

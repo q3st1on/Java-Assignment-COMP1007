@@ -1,7 +1,6 @@
 import java.io.*;
 import java.util.*;
 
-
 /*****************************************************
  * Author : Orlando Morris-Johnson (22222598)        *
  * Purpose: To store and manage information about    *
@@ -16,53 +15,81 @@ class Author
     private String birthYear;
     private Book[] books = new Book[1];
 
-    //Functions to expose internal variables from author object
+    //Getter functions to expose internal variables from author object
     public String getFirstName() { return firstName; }
     public String getLastName() { return familyName; }
     public String getNationality() { return nationality; }
     public String getBirthYear() { return birthYear; }
     public Book[] getBooks() { return books; }
 
+    //Setter functions to expose internal variables from author object
     public void setFirstName(String newFirstName) { firstName = newFirstName; }
     public void setLastName(String newLastName) { familyName = newLastName; }
     public void setNationality(String newNationality) { nationality = newNationality; }
     public void setBirthYear(String newBirthYear) { birthYear = newBirthYear; }
 
+    /*****************************************************
+     * Name   : addBook                                  *
+     * Date   : 08/10/2024                               *
+     * Import : newBook (Book)                           * 
+     * Export : None                                     *
+     * Purpose: To manage addition of books to an author *
+     *          object's book array                      * 
+     *****************************************************/
     public void addBook(Book newBook)
     {
         if (books[0] == null)
         {
+            // If no books in book array, set first entry in book array from null to the new book
             books[0] = newBook;
         }
         else
         {
+            // If not first book, create a new copy of books array with 1 extra book at the end
             Book[] books1 = Arrays.copyOf(books, books.length + 1);
+
+            // Overwrite books array with the new longer version
             books = books1;
+
+            // Set book at the end to the new book we have made
             books[books.length-1] = newBook;
         }
     }
 
+    /*****************************************************
+     * Name   : toString                                 *
+     * Date   : 08/10/2024                               *
+     * Import : None                                     * 
+     * Export : value (String)                           *
+     * Purpose: Creates toString function for testing    * 
+     *****************************************************/
     @Override
     public String toString()
     {
+        // Create a string for the authors full name.
         String fullName =  String.format("%s %s", firstName, familyName);
+
+        // Return string with authors name year of birth and nationality
         return String.format("Name: %-20s | Born: %-6s | Nationality: %-10s", fullName, birthYear, nationality);
 
     }
 
+    /*****************************************************
+     * Name   : hashCode                                 *
+     * Date   : 08/10/2024                               *
+     * Import : None                                     * 
+     * Export : hashCode (int)                           *
+     * Purpose: Creates hashCode function for comparing  *
+     *          Authors ignoring their book array        *  
+     *****************************************************/
     @Override
     public int hashCode()
     {
-        int hashCode = 1;
-        try {
-            hashCode *= familyName.hashCode() * firstName.hashCode() * nationality.hashCode() * birthYear.hashCode();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // Set hashcode to multiple of hashcodes for names, nationality and birthyear
+        int hashCode = familyName.hashCode() * firstName.hashCode() * nationality.hashCode() * birthYear.hashCode();
         return hashCode;
     }
 }
-
 
 /*****************************************************
  * Author : Orlando Morris-Johnson (22222598)        *
@@ -80,6 +107,7 @@ class Book
     private String year;
     private int edition;
 
+    //Getter functions to expose internal variables from book object
     public Author[] getAuthors() { return authors; }
     public boolean isEbook() { return ebook; }
     public String getTitle() { return title; }
@@ -88,31 +116,49 @@ class Book
     public int getEdition() { return edition; }
     public int getAuthorCount() { return authorCount; }
     
+    //Setter functions to expose internal variables from book object
     public void setEbook(boolean isEbook) { ebook = isEbook; }
     public void setTitle(String newTitle) { title = newTitle; }
     public void setISBN(String newISBN) { isbn = newISBN; }
     public void setEdition(int newEdition) { edition = newEdition; }
     public void setYear(String newYear) { year = newYear; }
-    public void setAuthorCount(int newAuthorCount) { authorCount = newAuthorCount; }
 
+    /*****************************************************
+     * Name   : addAuthor                                *
+     * Date   : 08/10/2024                               *
+     * Import : newAuthor (Author)                       * 
+     * Export : None                                     *
+     * Purpose: To manage addition of authors to a book  *
+     *          and ensure no more than three are added  * 
+     *****************************************************/
     public void addAuthor(Author newAuthor) {
+        // Check there is space for aditional author
         if (authorCount < 3)
         {
+            // Boolean to represent if Author is unique
             boolean unique = true;
+
+            // Loop through all current authors of book
             for (int i = 0; i < authorCount; i++)
             {
+                // Check if new author is the same as existing author
                 if (newAuthor.hashCode() == authors[i].hashCode())
                 {
                     unique = false;
                 }
             }
+
             if (unique)
             {
+                // If author is unique, add them to the authors array
                 authors[authorCount] = newAuthor;
+
+                // Increment authorCount
                 authorCount ++;
             }
             else
             {
+                // Print error message that the chosen author is already added to the book
                 System.err.println("Error: Author already added to book!");
             }
         }
@@ -122,16 +168,83 @@ class Book
         }
     }
 
-    public void overwriteAuthor(int i, Author newAuthor)
+    /*****************************************************
+     * Name   : overwriteAuthor                          *
+     * Date   : 08/10/2024                               *
+     * Import : index (int), newAuthor (Author)          * 
+     * Export : None                                     *
+     * Purpose: To overwrite specific author instance in *
+     *          the books authors array                  * 
+     *****************************************************/
+    public void overwriteAuthor(int index, Author newAuthor)
     {
-        authors[i] = newAuthor;
+        authors[index] = newAuthor;
     }
 
-    public void removeAuthor(int i)
+    /*****************************************************
+     * Name   : removeAuthor                             *
+     * Date   : 08/10/2024                               *
+     * Import : index (int)                              * 
+     * Export : None                                     *
+     * Purpose: To remove specific author from authors   *
+     *          array and move other authors if needed   * 
+     *****************************************************/
+    public void removeAuthor(int index)
     {
+        int i;
+        
+        // Overwrite author at chosen position with null
+        authors[index] = null;
+
+        for (i = index; i < authorCount-1; i++)
+        {
+            // For each author from the chosen position to the final author in the book
+            // overwrite the author with the next author in the array
+            overwriteAuthor(i, authors[i+1]);
+        }
+
+
         authors[i] = null;
+        authorCount -= 1;
     }
     
+    /*****************************************************
+     * Name   : pruneAuthors                             *
+     * Date   : 08/10/2024                               *
+     * Import : authorIndex (int)                        * 
+     * Export : None                                     *
+     * Purpose: To remove duplicate authors from authors *
+     *          array                                    * 
+     *****************************************************/
+    public void pruneAuthors(int authorIndex)
+    {
+        int i;
+        boolean duplicate = false;
+
+        for (i = 0; i < authorCount-1; i++)
+        {
+            if (i != authorIndex)
+            {
+                if (authors[i].hashCode() == authors[authorIndex].hashCode())
+                {
+                    duplicate = true;
+                }
+            }
+        }
+
+        if (duplicate)
+        {
+            removeAuthor(authorIndex);
+        }
+    }
+
+    /*****************************************************
+     * Name   : toString                                 *
+     * Date   : 08/10/2024                               *
+     * Import : None                                     * 
+     * Export : None                                     *
+     * Purpose: Creates toString function for testing    * 
+     *****************************************************/
     @Override
     public String toString()
     {
@@ -139,28 +252,47 @@ class Book
     }
 }
 
+/*****************************************************
+ * Author : Orlando Morris-Johnson (22222598)        *
+ * Purpose: To create a throwable exception for an   * 
+ *          incorrect data file                      * 
+ * Date   : 08/10/2024                               *
+ *****************************************************/
+class IncorrectDataFileException extends Exception { 
+    public IncorrectDataFileException(String errorMessage) {
+        super(errorMessage);
+    }
+}
 
 /*****************************************************
  * Author : Orlando Morris-Johnson (22222598)        *
- * Purpose: To store and manage information about    *
- *          authors.                                 * 
+ * Purpose: To store and manage information in the   *
+ *          library system.                          *
  * Date   : 08/10/2024                               *
  *****************************************************/
 public class Assignment
 {
-    static Scanner sc = new Scanner(System.in);
-
-    static Book[] books = new Book[1];
-    static Author[] authors = new Author[1];
-    static String filePath = "StartingDataFile.csv";
-    static String[] csvHeader;
+    static Scanner sc = new Scanner(System.in); // Scanner object to be used for user input
+    static Book[] books = new Book[1]; // Library's books array. Contains all books in the library
+    static Author[] authors = new Author[1]; // Library's authors array. Contains all authors of books in the library
+    static String filePath = "StartingDataFile.csv"; // Location of the library's data file.
+    static String[] csvHeader = {
+        "title",
+        "familyNameOne",  "firstNameOne",  "nationalityOne",  "birthYearOne",
+        "familyNameTwo",  "firstNameTwo",  "nationalityTwo",  "birthYearTwo",
+        "familyNameThree","firstNameThree","nationalityThree","birthYearThree",
+        "year",
+        "isbn",
+        "ebook",
+        "edition"
+    };
 
 
     /*****************************************************
      * Name   : getInput                                 *
      * Date   : 08/10/2024                               *
      * Import : None                                     * 
-     * Export : val (String)                             *
+     * Export : value (String)                           *
      * Purpose: To get a string entered by the user      *
      *          even if it contains spaces               * 
      *****************************************************/
@@ -171,7 +303,8 @@ public class Assignment
         try
         {
             return input.readLine();
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
           return "Error: " + e.getMessage();
         }
@@ -181,7 +314,7 @@ public class Assignment
      * Name   : getInt                                   *
      * Date   : 08/10/2024                               *
      * Import : None                                     * 
-     * Export : val (int)                                *
+     * Export : value (int)                              *
      * Purpose: To get an integer entered by the user    *
      *****************************************************/
     static int getInt() // Integer Input Func
@@ -202,7 +335,7 @@ public class Assignment
      * Name   : getBoundedInt                            *
      * Date   : 08/10/2024                               *
      * Import : lower (int), upper (int)                 * 
-     * Export : val (String)                             *
+     * Export : value (int)                              *
      * Purpose: To get an integer entered by the user    * 
      *          that falls between lower and upper       * 
      *****************************************************/
@@ -224,7 +357,7 @@ public class Assignment
      * Name   : csvReader                                *
      * Date   : 08/10/2024                               *
      * Import : None                                     * 
-     * Export : val (String[][])                         *
+     * Export : data (String[][])                        *
      * Purpose: To read in the contents of a csv file    * 
      *          and return them as a 2d string array     * 
      *****************************************************/
@@ -236,7 +369,7 @@ public class Assignment
         BufferedReader br;
         String line;
         boolean empty = true;
-        String[][] Data = new String[][] {{""}};
+        String[][] data = new String[][] {{""}};
         
         try
         {
@@ -250,13 +383,13 @@ public class Assignment
                 filePath = file.getAbsolutePath();
                 if (empty)
                 {
-                    Data[0] = line.split(",");
+                    data[0] = line.split(",");
                     empty = false;
                 } else
                 {
-                    String[][] Data1 = Arrays.copyOf(Data, Data.length + 1);
-                    Data = Data1;
-                    Data[Data.length-1] = line.split(",");
+                    String[][] data1 = Arrays.copyOf(data, data.length + 1);
+                    data = data1;
+                    data[data.length-1] = line.split(",");
                 }
                 line = br.readLine();
             }
@@ -277,56 +410,7 @@ public class Assignment
             }
             System.err.println("Error in file reading: " + e.getMessage());
         }
-        return Data;
-    }
-
-    /*****************************************************
-     * Name   : addAuthors                               *
-     * Date   : 08/10/2024                               *
-     * Import : newAuthor (Author)                       * 
-     * Export : None                                     *
-     * Purpose: To take a new author, if unique to add   *
-     *          them to the array of authors and if not  *
-     *          unique to add the books they have made   *
-     *          to the existing entry for that author    * 
-     *****************************************************/
-    static void addAuthors(Author newAuthor)
-    {
-        if (authors[0] == null)
-        {
-            authors[0] = newAuthor;
-        }
-        else
-        {
-            boolean unique = true;
-            int newAuthorHash = newAuthor.hashCode();
-            
-            for (Author author : authors)
-            {
-                if (author.hashCode() == newAuthorHash)
-                {
-                    unique = false;
-                    for (Book book : newAuthor.getBooks())
-                    {
-                        author.addBook(book);
-                        for (int i = 0; i < book.getAuthorCount(); i++)
-                        {
-                            if (book.getAuthors()[i] == newAuthor)
-                            {
-                                book.overwriteAuthor(i, author);
-                            }
-                        }
-                    }
-                }
-            }
-    
-            if (unique)
-            {
-                Author[] authors1 = Arrays.copyOf(authors, authors.length + 1);
-                authors = authors1;
-                authors[authors.length-1] = newAuthor;
-            }
-        }
+        return data;
     }
 
     /*****************************************************
@@ -414,6 +498,8 @@ public class Assignment
             }
             else
             {
+                fileStream.flush();
+                fileStream.close();
                 throw new IOException("Temp file could not be created at: " + tempFile.getAbsolutePath());
             }
 
@@ -434,6 +520,91 @@ public class Assignment
             e.printStackTrace();
         }
     }
+
+    /*****************************************************
+     * Name   : addAuthors                               *
+     * Date   : 08/10/2024                               *
+     * Import : newAuthor (Author)                       * 
+     * Export : None                                     *
+     * Purpose: To take a new author, if unique to add   *
+     *          them to the array of authors and if not  *
+     *          unique to add the books they have made   *
+     *          to the existing entry for that author    * 
+     *****************************************************/
+    static void addAuthors(Author newAuthor)
+    {
+        if (authors[0] == null)
+        {
+            authors[0] = newAuthor;
+        }
+        else
+        {
+            boolean unique = true;
+            int newAuthorHash = newAuthor.hashCode();
+            
+            for (Author author : authors)
+            {
+                if (author.hashCode() == newAuthorHash)
+                {
+                    unique = false;
+                    for (Book book : newAuthor.getBooks())
+                    {
+                        author.addBook(book);
+                        for (int i = 0; i < book.getAuthorCount(); i++)
+                        {
+                            if (book.getAuthors()[i] == newAuthor)
+                            {
+                                book.overwriteAuthor(i, author);
+                            }
+                        }
+                    }
+                }
+            }
+    
+            if (unique)
+            {
+                Author[] authors1 = Arrays.copyOf(authors, authors.length + 1);
+                authors = authors1;
+                authors[authors.length-1] = newAuthor;
+            }
+        }
+    }
+
+    /*****************************************************
+     * Name   : pruneAuthors                             *
+     * Date   : 08/10/2024                               *
+     * Import : checkAuthor (Author)                     * 
+     * Export : None                                     *
+     * Purpose: If an action has been taken that has the *
+     *          possibility of having duplicated an      *
+     *          author, this function is called to find  *
+     *          and remove any created duplicates        * 
+     *****************************************************/
+    static void pruneAuthors(Author checkAuthor)
+    {
+        int checkAuthorHash = checkAuthor.hashCode();
+        
+        for (Author author : authors)
+        {
+            if (author.hashCode() == checkAuthorHash)
+            {
+                if (!author.equals(checkAuthor))
+                {
+                    for (Book book : checkAuthor.getBooks())
+                    {
+                        author.addBook(book);
+                        for (int i = 0; i < book.getAuthorCount(); i++)
+                        {
+                            if (book.getAuthors()[i] == checkAuthor)
+                            {
+                                book.overwriteAuthor(i, author);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     /*****************************************************
      * Name   : genBooks                                 *
@@ -444,54 +615,75 @@ public class Assignment
      *          and create the relevant Author and Book  *
      *          object instanced                         *
      *****************************************************/
-    static void genBooks(String[][]CSVData)
+    static void genBooks(String[][]csvData) throws IncorrectDataFileException
     {
-        csvHeader = CSVData[0];
-
-        for (int i = 1; i < CSVData.length; i++)
+        // If csv header is incorrect throw exception to be handle in main method.
+        if (csvData[0].equals(csvHeader)) 
         {
+            throw new IncorrectDataFileException("Incorrect Data File: CSV header is incorrect.");
+        }
+
+        // Loop through each array in CSV except the first
+        for (int i = 1; i < csvData.length; i++) 
+        {
+            // Create new book instance 
             Book newBook = new Book();
 
-            newBook.setTitle(CSVData[i][0]);
-            newBook.setYear(CSVData[i][13]);
-            newBook.setISBN(CSVData[i][14]);
-            newBook.setEbook(CSVData[i][15].equals("TRUE"));
-            newBook.setEdition(Integer.parseInt(CSVData[i][16]));
+            // Sets the information of the new book
+            newBook.setTitle(csvData[i][0]);
+            newBook.setYear(csvData[i][13]);
+            newBook.setISBN(csvData[i][14]);
+            newBook.setEbook(csvData[i][15].equals("TRUE"));
+            newBook.setEdition(Integer.parseInt(csvData[i][16]));
 
+            // Loop through each author field
             for (int j = 0; j < 3; j++)
             {
-                if (CSVData[i][1+(j*4)] != "")
+                // Check that author name field is not empty (if it is, don't create an author for that)
+                if (csvData[i][1+(j*4)] != "")
                 {
+                    // Create new author instance
                     Author newAuthor = new Author();
 
-                    newAuthor.setLastName(CSVData[i][1 + (j*4)]);
-                    newAuthor.setFirstName(CSVData[i][2 + (j*4)]);
-                    newAuthor.setNationality(CSVData[i][3 + (j*4)]);
-                    newAuthor.setBirthYear(CSVData[i][4 + (j*4)]);
+                    // Set the information of the new author
+                    newAuthor.setLastName(csvData[i][1 + (j*4)]);
+                    newAuthor.setFirstName(csvData[i][2 + (j*4)]);
+                    newAuthor.setNationality(csvData[i][3 + (j*4)]);
+                    newAuthor.setBirthYear(csvData[i][4 + (j*4)]);
                     newAuthor.addBook(newBook);
 
+                    // Add author to book
                     newBook.addAuthor(newAuthor);
+
+                    // Call addAuthors to handle duplication of authors across books
                     addAuthors(newAuthor);
                 }
             }
 
             if (i == 1)
             {
+                // If first book, change first entry of books array from null to the new book
                 books[0] = newBook;
             } 
             else
             {
+                // If not first book, create a new copy of books array with 1 extra book at the end
                 Book[] books1 = Arrays.copyOf(books, books.length + 1);
+
+                // Overwrite books array with the new longer version
                 books = books1;
+
+                // Set book at the end to the new book we have made
                 books[books.length-1] = newBook;
             }
         }
     }
+
     /*****************************************************
      * Name   : printMenu                                *
      * Date   : 08/10/2024                               *
      * Import : None                                     *
-     * Export : val (int)                                *
+     * Export : value (int)                              *
      * Purpose: To print out the main library menu and   *
      *          get the users selected menu option       *
      *****************************************************/
@@ -504,7 +696,6 @@ public class Assignment
             "View an author\'s Books",
             "Add Book",
             "Edit Book",
-            "Delete Book",
             "Exit"
         };
 
@@ -520,7 +711,7 @@ public class Assignment
         System.out.println("************************************");
         System.out.print("Your choice: ");
         
-        return getBoundedInt(0, menuOptions.length + 1);
+        return getBoundedInt(-1, menuOptions.length + 1);
     }
 
     /*****************************************************
@@ -590,6 +781,13 @@ public class Assignment
         System.out.println();
     }
 
+    /*****************************************************
+     * Name   : eBooks                                   *
+     * Date   : 08/10/2024                               *
+     * Import : None                                     *
+     * Export : None                                     *
+     * Purpose: To display all books which are ebooks    *
+     *****************************************************/
     static void eBooks()
     {
         System.out.println("************************************");
@@ -726,6 +924,13 @@ public class Assignment
      *****************************************************/
     static void addAuthorPrompt(Book book)
     {
+        if (book.getAuthorCount() >= 3)
+        {
+            System.out.println("Error: Cannot add more than 3 authors!");
+            System.out.println("       Please delete an author first.");
+            return;
+        }
+
         System.out.println("************************************");
         System.out.println("             Add Author             ");
         System.out.println("************************************");
@@ -818,6 +1023,14 @@ public class Assignment
                     
             }
         }
+
+        books[bookIndex].pruneAuthors(authorIndex);
+
+        for(i = 0; i < books[bookIndex].getAuthorCount(); i++)
+        {
+            pruneAuthors(books[bookIndex].getAuthors()[i]);
+        }
+
     }
 
     /*****************************************************
@@ -838,7 +1051,7 @@ public class Assignment
             "Change Last Name",
             "Change Birth Year",
             "Change Nationality",
-            "Exit"
+            "Exit menu"
         };
 
         System.out.println();
@@ -884,7 +1097,8 @@ public class Assignment
             "Change Edition",
             "Change ISBN",
             "Toggle eBook",
-            "Exit"
+            "Delete Book (and exit menu)",
+            "Exit menu"
         };
 
         System.out.println();
@@ -939,16 +1153,16 @@ public class Assignment
 
         chosen = getBoundedInt(0, books[bookIndex].getAuthorCount()+1) - 1;
         books[bookIndex].removeAuthor(chosen);
-
-        for (i = chosen; i < books[bookIndex].getAuthorCount()-1; i++)
-        {
-            books[bookIndex].overwriteAuthor(i, books[bookIndex].getAuthors()[i+1]);
-        }
-
-        books[bookIndex].removeAuthor(i);
-        books[bookIndex].setAuthorCount(books[bookIndex].getAuthorCount()-1);
     }
 
+    /*****************************************************
+     * Name   : editBook                                 *
+     * Date   : 08/10/2024                               *
+     * Import : None                                     *
+     * Export : None                                     *
+     * Purpose: To allow the user to select a speficic   *
+     *          book and edit it                         *
+     *****************************************************/
     static void editBook()
     {
         int i, j, bookIndex;
@@ -991,15 +1205,7 @@ public class Assignment
             
             switch (printBookEditMenu(books[bookIndex])) {
                 case 1:
-                    if (books[bookIndex].getAuthorCount() >= 3)
-                    {
-                        System.out.println("Error: Cannot add more than 3 authors!");
-                        System.out.println("       Please delete an author first.");
-                    }
-                    else
-                    {
-                        addAuthorPrompt(books[bookIndex]);
-                    }
+                    addAuthorPrompt(books[bookIndex]);
                     break;
     
                 case 2:
@@ -1035,6 +1241,11 @@ public class Assignment
                     break;
 
                 case 9:
+                    deleteBook(bookIndex);
+                    loop = false;
+                    break;
+
+                case 10:
                     loop = false;
                     break;
 
@@ -1048,38 +1259,17 @@ public class Assignment
         System.out.println();
     }
 
-    static void deleteBook()
+    /*****************************************************
+     * Name   : deleteBook                               *
+     * Date   : 08/10/2024                               *
+     * Import : bookIndex (int)                          *
+     * Export : None                                     *
+     * Purpose: To allow the user to delete a speficic   *
+     *          book                                     *
+     *****************************************************/
+    static void deleteBook(int bookIndex)
     {
-        int i, j, bookIndex;
-
-        System.out.println("************************************");
-        System.out.println("            Delete Book             ");
-        System.out.println("************************************"); 
-        System.out.println();
-        System.out.println("List of Books:");
-
-        for (i = 0; i < books.length; i++)
-        {
-            System.out.printf("Book %d:\n", i+1);
-            System.out.printf("%2d > Title: %s\n", i+1, books[i].getTitle());
-            System.out.printf("%2d > Published: %s\n", i+1, books[i].getYear());
-            System.out.printf("%2d > ISBN: %s\n", i+1, books[i].getISBN());
-            System.out.printf("%2d > eBook: %b\n", i+1, books[i].isEbook());
-            System.out.printf("%2d > Edition: %d\n", i+1, books[i].getEdition());
-
-            for (j = 0; j < books[i].getAuthorCount(); j++)
-            {
-                System.out.printf("%2d > Author:\n", i+1);
-                System.out.printf("%2d >  Name: %s %s\n", i+1, books[i].getAuthors()[j].getFirstName(), books[i].getAuthors()[j].getLastName());
-                System.out.printf("%2d >  Nationality: %s\n", i+1, books[i].getAuthors()[j].getNationality());
-                System.out.printf("%2d >  Born: %s\n", i+1, books[i].getAuthors()[j].getBirthYear());
-            }
-        }
-        System.out.println();
-        System.out.print("Select a book to delete: ");
-
-        bookIndex = getBoundedInt(0, books.length + 1) - 1;
-
+        int i;
         books[bookIndex] = null;
         
         for (i = bookIndex; i < books.length-1; i++)
@@ -1091,11 +1281,28 @@ public class Assignment
 
         Book[] newBooks = Arrays.copyOf(books, books.length-1);
         books = newBooks;
-
-        System.out.println("************************************");
-        System.out.println();
     }
 
+    /*****************************************************
+     * Name   : clearScreen                              *
+     * Date   : 08/10/2024                               *
+     * Import : None                                     *
+     * Export : None                                     *
+     * Purpose: implements clear screen easter egg       *
+     *****************************************************/
+    static void clearScreen()
+    {
+        System.out.print("\033[H\033[2J"); 
+        System.out.flush();
+    }
+
+    /*****************************************************
+     * Name   : printAllBooks                            *
+     * Date   : 08/10/2024                               *
+     * Import : None                                     *
+     * Export : None                                     *
+     * Purpose: prints all books                         *
+     *****************************************************/
     static void printAllBooks()
     {
         System.out.println("************************************");
@@ -1108,64 +1315,159 @@ public class Assignment
         System.out.println();
     }
 
-    public static void main(String[] args)
+    /*****************************************************
+     * Name   : printHelpPrompt                          *
+     * Date   : 08/10/2024                               *
+     * Import : None                                     *
+     * Export : None                                     *
+     * Purpose: prints usage help prompt                 *
+     *****************************************************/
+    static void printHelpPrompt()
     {
-        try
+        System.out.println("Library system for COMP1007 (PDI) Assignment.");
+        System.out.println("Written by Orlando Morris-Johnson (22222598).");
+        System.out.println("");
+        System.out.println("Usage:");
+        System.out.println("\t-h\t--help\tDisplay this prompt.");
+        System.out.println("\t-f\t--file\tSpecify library data file location (default: .\\StartingDataFile.csv)");
+    }
+
+    /*****************************************************
+     * Name   : handleArgs                               *
+     * Date   : 08/10/2024                               *
+     * Import : args (String[])                          *
+     * Export : value (boolean)                          *
+     * Purpose: Handle user arguments (if supplied).     *
+     *          Allows users to specify alternate data   *
+     *          file locations.                          *
+     *****************************************************/
+    static boolean handleArgs(String[] args)
+    {
+        if (args.length == 0)
         {
-            String[][] CSVData = csvReader();
-            genBooks(CSVData);
+            return true;
+        }
 
-            boolean loop = true;
-            while (loop)
+        if ((args[0] == "-h") || (args[0] == "--help"))
+        {
+            printHelpPrompt();
+            return false;
+        }
+
+        if ((args[0] == "-f") || (args[0] == "--file"))
+        {
+            if (args.length == 1) 
             {
-                switch (printMenu()) {
-                    case 1:
-                        printAllBooks();
-                        break;
-        
-                    case 2:
-                        eBooks();
-                        break;
-        
-                    case 3:
-                        noneBooks();
-                        break;
-        
-                    case 4:
-                        booksByAuthor();
-                        break;
-        
-                    case 5:
-                        addBook();
-                        writeCSV();
-                        break;
-        
-                    case 6:
-                        editBook();
-                        writeCSV();
-                        break;
-        
-                    case 7:
-                        deleteBook();
-                        writeCSV();
-                        break;
+                System.out.println("Error: please specify data file location when using file flag.");
+                return false;
+            }
 
-                    case 8:
-                        loop = false;
-                        break;
-                        
-                    default:
-                        System.err.println("Please choose a valid menu option (enter 1-7)");
-                        
+            System.out.printf("Reading from data file %s\n", args[1]);
+            try {
+                File dataFile = new File(args[1]);
+            
+                if (dataFile.exists())
+                {
+                    filePath = args[1];
+                    return true;
+                }
+                else
+                {
+                    System.out.printf("Error: Could not open file located at %s\n", args[1]);
+                    return false;
                 }
             }
-            writeCSV();
+            catch (Exception e)
+            {
+                System.out.printf("Error opening file %s:\n", args[1]);
+                System.out.println(e.getMessage());
+                return false;
+            }
+        }
+
+        System.out.println("Error: unknown flags provided.");
+        System.out.println("Printing usage information...");
+        printHelpPrompt();
+        return false;
+    }
+
+    /*****************************************************
+     * Name   : main                                     *
+     * Date   : 08/10/2024                               *
+     * Import : None                                     *
+     * Export : None                                     *
+     * Purpose: read in data file, generate library book *
+     *          arrays then loop through menu prompt     *
+     *          until user exits.                        *
+     *****************************************************/
+    public static void main(String[] args)
+    {
+        if (handleArgs(args))
+        {
+            try
+            {
+                String[][] CSVData = csvReader();
+                genBooks(CSVData);
+    
+                boolean loop = true;
+                while (loop)
+                {
+                    switch (printMenu()) {
+                        case 0:
+                            clearScreen();
+                            break;
+    
+                        case 1:
+                            printAllBooks();
+                            break;
+            
+                        case 2:
+                            eBooks();
+                            break;
+            
+                        case 3:
+                            noneBooks();
+                            break;
+            
+                        case 4:
+                            booksByAuthor();
+                            break;
+            
+                        case 5:
+                            addBook();
+                            writeCSV();
+                            break;
+            
+                        case 6:
+                            editBook();
+                            writeCSV();
+                            break;
+    
+                        case 7:
+                            loop = false;
+                            break;
+                            
+                        default:
+                            System.err.println("Please choose a valid menu option (enter 1-7)");
+                            
+                    }
+                }
+                writeCSV();
+                System.out.println("Thank you for using the system!"); 
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        try {
             sc.close();
         }
-        catch (Exception e)
+        catch (Exception closeError)
         {
-            sc.close();
-            e.printStackTrace();
+            System.out.println("Error: Could not close scanner object.");
+            closeError.printStackTrace();
         }
     }
 }
