@@ -16,6 +16,7 @@ class Author
     private String birthYear;
     private Book[] books = new Book[1];
 
+    //Functions to expose internal variables from author object
     public String getFirstName() { return firstName; }
     public String getLastName() { return familyName; }
     public String getNationality() { return nationality; }
@@ -279,7 +280,7 @@ public class Assignment
         return Data;
     }
 
-    /*******************************************************
+    /*****************************************************
      * Name   : addAuthors                               *
      * Date   : 08/10/2024                               *
      * Import : newAuthor (Author)                       * 
@@ -288,7 +289,7 @@ public class Assignment
      *          them to the array of authors and if not  *
      *          unique to add the books they have made   *
      *          to the existing entry for that author    * 
-     *******************************************************/
+     *****************************************************/
     static void addAuthors(Author newAuthor)
     {
         if (authors[0] == null)
@@ -658,6 +659,14 @@ public class Assignment
         System.out.println();
     }
 
+    /*****************************************************
+     * Name   : addBook                                  *
+     * Date   : 08/10/2024                               *
+     * Import : None                                     *
+     * Export : None                                     *
+     * Purpose: To allow the user to enter information   *
+     *          for a new book to be in the system       *
+     *****************************************************/
     static void addBook()
     {
         System.out.println("************************************");
@@ -707,6 +716,14 @@ public class Assignment
         System.out.println();
     }
 
+    /*****************************************************
+     * Name   : addAuthorPrompt                          *
+     * Date   : 08/10/2024                               *
+     * Import : Book book                                *
+     * Export : None                                     *
+     * Purpose: To allow the user to enter information   *
+     *          for a new author to be in the system     *
+     *****************************************************/
     static void addAuthorPrompt(Book book)
     {
         System.out.println("************************************");
@@ -736,6 +753,14 @@ public class Assignment
 
     }
 
+    /*****************************************************
+     * Name   : editAuthor                               *
+     * Date   : 08/10/2024                               *
+     * Import : int bookIndex                            *
+     * Export : None                                     *
+     * Purpose: To allow the user to select a speficic   *
+     *          author of a book to edit                 *
+     *****************************************************/
     static void editAuthor(int bookIndex)
     {
         System.out.println("************************************");
@@ -795,6 +820,14 @@ public class Assignment
         }
     }
 
+    /*****************************************************
+     * Name   : printAuthorEditMenu                      *
+     * Date   : 08/10/2024                               *
+     * Import : author (Author)                          *
+     * Export : None                                     *
+     * Purpose: To allow the user to edit information    *
+     *          for a specific author of a specific book *
+     *****************************************************/
     static int printAuthorEditMenu(Author author)
     {
         System.out.println("************************************");
@@ -829,6 +862,14 @@ public class Assignment
         return getBoundedInt(0, menuOptions.length + 1);
     }
     
+    /*****************************************************
+     * Name   : printBookEditMenu                        *
+     * Date   : 08/10/2024                               *
+     * Import : Book book                                *
+     * Export : None                                     *
+     * Purpose: To allow the user to select a speficic   *
+     *          book to edit                             *
+     *****************************************************/
     static int printBookEditMenu(Book book)
     {
         System.out.println("************************************");
@@ -872,9 +913,16 @@ public class Assignment
         System.out.print("Your choice: ");
         
         return getBoundedInt(0, menuOptions.length + 1);
-
     }
 
+    /*****************************************************
+     * Name   : printBookEditMenu                        *
+     * Date   : 08/10/2024                               *
+     * Import : bookIndex (int)                          *
+     * Export : None                                     *
+     * Purpose: To allow the user to select a speficic   *
+     *          author of a book to remove               *
+     *****************************************************/
     static void removeAuthorPrompt(int bookIndex)
     {
         int i, chosen;
