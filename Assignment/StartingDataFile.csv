@@ -1,0 +1,11 @@
+title,title,firstNameOne,nationalityOne,birthYearOne,familyNameTwo,firstNameTwo,nationalityTwo,birthYearTwo,familyNameThree,firstNameThree,nationalityThree,birthYearThree,year,isbn,ebook,edition
+COMP1007 for Everyone,McMeekin,David,Aust,1990,Brower,Arlen,USA,1995,Liang,Antoni,France,1998,2024,1234567809,TRUE,1
+UCP for All Who Desire,Brower,Arlen,USA,1995,McMeekin,David,Aust,1990,Maxville,Valerie,Aust,1993,2023,9876543201,TRUE,1
+FOP for the Rest of Us,Maxville,Valerie,Aust,1993,Brower,Arlen,USA,1995,,,,,2019,1987654327,FALSE,2
+F1 Racing for Beginners,Liang,Antoni,France,1998,,,,,,,,,2022,2589631465,FALSE,12
+Over Engineered,Rashleigh,Keven,Aust,1990,Mackintosh,Ryan,Aust,1995,,,,,2020,4839670932,TRUE,5
+How to PDI,Meow,Mr,Colombia,2012,,,,,,,,,2024,1234567890,TRUE,6
+Wizarding for Muggles,Potter,Harry,England,1992,Grainger,Hermione,England,1992,Dumbledore,Albus,Japan,1500,2000,6666666669,TRUE,52
+How to be a GOAT,Cristiano,Ronaldo,Portugal,1985,Ishow,Speed,United States,2005,,,,,2013,4333333333,TRUE,1
+C99 is better than C89,Kernighan,Brian,Canada,1942,Ritchie,Dennis,USA,1941,,,,,1978,0131103628,TRUE,1
+Nova Sapiens: The Believers,Cooper,David J A,Aust,1993,,,,,,,,,2020,1011011101,FALSE,1
