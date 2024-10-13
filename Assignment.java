@@ -203,7 +203,7 @@ class Book
             overwriteAuthor(i, authors[i+1]);
         }
 
-
+        System.out.println(i);
         authors[i] = null;
         authorCount -= 1;
     }
@@ -606,11 +606,11 @@ public class Assignment
         // Overwrite author at chosen position with null
         authors[authorIndex] = null;
 
-        for (i = authorIndex; i < authors.length; i++)
+        for (i = authorIndex; i < authors.length-1; i++)
         {
             // For each author from the chosen position to the final author
             // overwrite the author with the next author in the array
-            
+            authors[i] = authors[i+1];
         }
 
 
