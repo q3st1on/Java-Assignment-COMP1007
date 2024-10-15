@@ -1,8 +1,11 @@
 package Library;
+import java.io.*;
+import java.util.*;
+
 
 public class CSVTools {
-    static String filePath = "StartingDataFile.csv";
-    static String[] csvHeader = {
+    private static String filePath = "StartingDataFile.csv";
+    private static String[] csvHeader = {
         "title",
         "familyNameOne",  "firstNameOne",  "nationalityOne",  "birthYearOne",
         "familyNameTwo",  "firstNameTwo",  "nationalityTwo",  "birthYearTwo",
@@ -13,7 +16,7 @@ public class CSVTools {
         "edition"
     };
     
-/*****************************************************
+    /*****************************************************
      * Name   : csvReader                                *
      * Date   : 08/10/2024                               *
      * Import : None                                     * 
@@ -21,7 +24,7 @@ public class CSVTools {
      * Purpose: To read in the contents of a csv file    * 
      *          and return them as a 2d string array     * 
      *****************************************************/
-    static String[][] csvReader()
+    public static String[][] csvReader()
     {
         File file = null;
         FileInputStream fs = null;
@@ -81,7 +84,7 @@ public class CSVTools {
      * Purpose: To take an array of strings and write it *
      *          to a line of a CSV file                  *
      *****************************************************/
-    static void writeCSVLine(String[] data, FileOutputStream file) throws IOException
+    private static void writeCSVLine(String[] data, FileOutputStream file) throws IOException
     {
         for (int i = 0; i < (data.length - 1); i++)
         {
@@ -100,7 +103,7 @@ public class CSVTools {
      * Purpose: To write out the library data to the CSV *
      *          data file                                *
      *****************************************************/
-    static void writeCSV() 
+    public static void writeCSV(Book[] books) 
     {
         FileOutputStream fileStream = null;
         File tempFile = null;
