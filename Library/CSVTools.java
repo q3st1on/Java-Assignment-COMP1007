@@ -4,6 +4,12 @@ import java.util.*;
 
 
 public class CSVTools {
+    /********************************************************************
+     * Class variables for the CSVTools class:                          *
+     * filePath (String)    : Location of the library data file         *
+     * csvHeader (String[]) : Known good headers for the data file      *
+     ********************************************************************/
+
     private static String filePath = "StartingDataFile.csv";
     private static String[] csvHeader = {
         "title",
@@ -15,7 +21,23 @@ public class CSVTools {
         "ebook",
         "edition"
     };
+
+    //Setter Func
+    public static void setFilePath(String newFilePath) { filePath = newFilePath; }
     
+
+    /*****************************************************
+     * Name   : verifyHeader                             *
+     * Date   : 08/10/2024                               *
+     * Import : testHeader (String[])                    * 
+     * Export : value (boolean)                          *
+     * Purpose: Verify header is correct to knwon good   * 
+     *****************************************************/
+    public static boolean verifyHeader(String[] testHeader)
+    {
+        return csvHeader.equals(testHeader);
+    }
+
     /*****************************************************
      * Name   : csvReader                                *
      * Date   : 08/10/2024                               *
@@ -110,7 +132,7 @@ public class CSVTools {
         File outFile = null;
         try 
         {
-            tempFile = new File("libraryDataFile.tmp");
+            tempFile = new File(".libraryDataFile.tmp");
             outFile = new File(filePath);
             fileStream = new FileOutputStream(tempFile);
             if (tempFile.exists())
@@ -180,6 +202,10 @@ public class CSVTools {
                 }
             }
             e.printStackTrace();
+        }
+        catch (Exception e)
+        {
+            System.err.println("Error: Could not write data file.");
         }
     }
 

@@ -1,6 +1,13 @@
+package Library;
+import java.io.*;
+import java.util.*;
 
 public class Input
 {
+    /********************************************************************
+     * Class variables for the Assignment class:                        *
+     * br (BufferedReader)  : BufferedReader object for user input      *
+     ********************************************************************/
     private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     /*****************************************************

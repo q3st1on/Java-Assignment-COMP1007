@@ -11,15 +11,17 @@ import java.util.*;
 public class Library
 {
     /********************************************************************
-     * Class variabled for the Assignment class:                        *
+     * Class variables for the Assignment class:                        *
      * br (BufferedReader)  : BufferedReader object for user input      *
      * books (Book[])       : Array for books inn the library           *
      * authors (Author[])   : Array for authors of books in the libaray *
-     * filePath (String)    : Location of the library data file         *
-     * csvHeader (String[]) : Known good headers for the data file      *
      ********************************************************************/
-    static Book[] books = new Book[1];
-    static Author[] authors = new Author[1];
+    private static Book[] books = new Book[1];
+    private static Author[] authors = new Author[1];
+    private static Input input = new Input();
+    private static Printers printers = new Printers();
+    private static CSVTools csvTools = new CSVTools();
+
 
     /*****************************************************
      * Name   : addAuthors                               *
@@ -181,7 +183,7 @@ public class Library
     static void genBooks(String[][]csvData) throws IncorrectDataFileException
     {
         // If csv header is incorrect throw exception to be handle in main method.
-        if (csvData[0].equals(csvHeader)) 
+        if (csvTools.verifyHeader(csvData[0])) 
         {
             throw new IncorrectDataFileException("Incorrect Data File: CSV header is incorrect.");
         }
@@ -243,79 +245,6 @@ public class Library
     }
 
     /*****************************************************
-     * Name   : printMenu                                *
-     * Date   : 08/10/2024                               *
-     * Import : None                                     *
-     * Export : value (int)                              *
-     * Purpose: To print out the main library menu and   *
-     *          get the users selected menu option       *
-     *****************************************************/
-    static int printMenu()
-    {
-        String[] menuOptions = {
-            "View all Books",
-            "View eBooks",
-            "View non-eBooks",
-            "View an author\'s Books",
-            "Add Book",
-            "Edit Book",
-            "Exit"
-        };
-
-        System.out.println("************************************");
-        System.out.println("       Welcome to the Library       ");
-        System.out.println("************************************");
-        
-        for (int i = 0; i < menuOptions.length; i++)
-        {
-            System.out.printf("%2d > %s\n", i+1, menuOptions[i]);
-        }
-
-        System.out.println("************************************");
-        System.out.print("Your choice: ");
-        
-        return getBoundedInt(-1, menuOptions.length + 1);
-    }
-
-    /*****************************************************
-     * Name   : bookPrinter                              *
-     * Date   : 08/10/2024                               *
-     * Import : bookArray (Book[])                       *
-     * Export : None                                     *
-     * Purpose: To print out the data of each book in an *
-     *          array of books                           *
-     *****************************************************/
-    static void bookPrinter(Book[] bookArray)
-    {
-        if (bookArray[0] == null)
-        {
-            System.out.println();
-            System.out.println("No Books Found");
-        }
-        else
-        {
-            for (Book book : bookArray)
-            {
-                System.out.println();
-                System.out.println("Book:");
-                System.out.printf(" Title: %s\n", book.getTitle());
-                System.out.printf(" Published: %s\n", book.getYear());
-                System.out.printf(" ISBN: %s\n", book.getISBN());
-                System.out.printf(" eBook: %b\n", book.isEbook());
-                System.out.printf(" Edition: %d\n", book.getEdition());
-
-                for (int i = 0; i < book.getAuthorCount(); i++)
-                {
-                    System.out.println(" Author:");
-                    System.out.printf("  Name: %s %s\n", book.getAuthors()[i].getFirstName(), book.getAuthors()[i].getLastName());
-                    System.out.printf("  Nationality: %s\n", book.getAuthors()[i].getNationality());
-                    System.out.printf("  Born: %s\n", book.getAuthors()[i].getBirthYear());
-                }
-            }
-        }
-    }
-
-    /*****************************************************
      * Name   : booksByAuthor                            *
      * Date   : 08/10/2024                               *
      * Import : None                                     *
@@ -338,7 +267,7 @@ public class Library
         System.out.println();
         System.out.print("Select an Author: ");
 
-        bookPrinter(authors[getInt()-1].getBooks());
+        printers.bookPrinter(authors[input.getInt()-1].getBooks());
 
         System.out.println("************************************");
         System.out.println();
@@ -376,7 +305,7 @@ public class Library
             }
         }
     
-        bookPrinter(foundBooks);
+        printers.bookPrinter(foundBooks);
 
         System.out.println("************************************");
         System.out.println();
@@ -414,7 +343,7 @@ public class Library
             }
         }
     
-        bookPrinter(foundBooks);
+        printers.bookPrinter(foundBooks);
 
         System.out.println("************************************");
         System.out.println();
@@ -438,15 +367,15 @@ public class Library
         Book newBook = new Book();
 
         System.out.print("Enter Book Title: ");
-        newBook.setTitle(getInput());
+        newBook.setTitle(input.getInput());
         System.out.print("Enter Book Year: ");
-        newBook.setYear(String.valueOf(getInt()));
+        newBook.setYear(String.valueOf(input.getInt()));
         System.out.print("Enter Book ISBN: ");
-        newBook.setISBN(getInput());
+        newBook.setISBN(input.getInput());
         System.out.print("Enter Book Edition: ");
-        newBook.setEdition(getInt());
+        newBook.setEdition(input.getInt());
         System.out.print("Is Book an eBook (y/n)? ");
-        String reply = getInput().toLowerCase();
+        String reply = input.getInput().toLowerCase();
         if (reply.equals("y") || reply.equals("yes") || reply.equals("t") || reply.equals("true"))
         {
             newBook.setEbook(true);
@@ -456,7 +385,7 @@ public class Library
             newBook.setEbook(false);
         }
         System.out.print("How many Authors are there?");
-        int authorCount = getBoundedInt(0, 4);
+        int authorCount = input.getBoundedInt(0, 4);
         for (int i = 0; i < authorCount; i++)
         {
             addAuthorPrompt(newBook);
@@ -501,16 +430,16 @@ public class Library
 
         Author newAuthor = new Author();
         System.out.print("Enter Author First Name: ");
-        newAuthor.setFirstName(getInput());
+        newAuthor.setFirstName(input.getInput());
 
         System.out.print("Enter Author Last Name: ");
-        newAuthor.setLastName(getInput());
+        newAuthor.setLastName(input.getInput());
 
         System.out.print("Enter Author Nationality: ");
-        newAuthor.setNationality(getInput());
+        newAuthor.setNationality(input.getInput());
 
         System.out.print("Enter Author Birth Year: ");
-        newAuthor.setBirthYear(String.valueOf(getInt()));
+        newAuthor.setBirthYear(String.valueOf(input.getInt()));
 
         newAuthor.addBook(book);
         book.addAuthor(newAuthor);
@@ -552,29 +481,29 @@ public class Library
         }
         System.out.print("Select an Author: ");
 
-        authorIndex = getBoundedInt(0, books[bookIndex].getAuthorCount() + 1) - 1;
+        authorIndex = input.getBoundedInt(0, books[bookIndex].getAuthorCount() + 1) - 1;
 
         while (loop)
         {
-            switch (printAuthorEditMenu(books[bookIndex].getAuthors()[authorIndex])) {
+            switch (printers.printAuthorEditMenu(input, books[bookIndex].getAuthors()[authorIndex])) {
                 case 1:
                     System.out.print("Enter new first name: ");
-                    books[bookIndex].getAuthors()[authorIndex].setFirstName(getInput());
+                    books[bookIndex].getAuthors()[authorIndex].setFirstName(input.getInput());
                     break;
     
                 case 2:
                     System.out.print("Enter new last name: ");
-                    books[bookIndex].getAuthors()[authorIndex].setLastName(getInput());
+                    books[bookIndex].getAuthors()[authorIndex].setLastName(input.getInput());
                     break;
     
                 case 3:
                     System.out.print("Enter new birth year: ");
-                    books[bookIndex].getAuthors()[authorIndex].setBirthYear(String.valueOf(getInt()));
+                    books[bookIndex].getAuthors()[authorIndex].setBirthYear(String.valueOf(input.getInt()));
                     break;
     
                 case 4:
                     System.out.print("Enter new nationality: ");
-                    books[bookIndex].getAuthors()[authorIndex].setNationality(getInput());
+                    books[bookIndex].getAuthors()[authorIndex].setNationality(input.getInput());
                     break;
     
                 case 5:
@@ -594,102 +523,6 @@ public class Library
             pruneAuthors(books[bookIndex].getAuthors()[i]);
         }
 
-    }
-
-    /*****************************************************
-     * Name   : printAuthorEditMenu                      *
-     * Date   : 08/10/2024                               *
-     * Import : author (Author)                          *
-     * Export : None                                     *
-     * Purpose: To allow the user to edit information    *
-     *          for a specific author of a specific book *
-     *****************************************************/
-    static int printAuthorEditMenu(Author author)
-    {
-        System.out.println("************************************");
-        System.out.println("            Edit Author             ");
-        System.out.println("************************************"); 
-        String[] menuOptions = {
-            "Change First Name",
-            "Change Last Name",
-            "Change Birth Year",
-            "Change Nationality",
-            "Exit menu"
-        };
-
-        System.out.println();
-        
-        System.out.printf("Author:\n");
-        System.out.printf(" Name: %s %s\n",author.getFirstName(), author.getLastName());
-        System.out.printf(" Nationality: %s\n", author.getNationality());
-        System.out.printf(" Born: %s\n", author.getBirthYear());
-
-        System.out.println();
-        System.out.println("What would you like to do?");
-
-        for (int i = 0; i < menuOptions.length; i++)
-        {
-            System.out.printf("%2d > %s\n", i+1, menuOptions[i]);
-        }
-        System.out.println("************************************");
-
-        System.out.print("Your choice: ");
-        
-        return getBoundedInt(0, menuOptions.length + 1);
-    }
-    
-    /*****************************************************
-     * Name   : printBookEditMenu                        *
-     * Date   : 08/10/2024                               *
-     * Import : Book book                                *
-     * Export : None                                     *
-     * Purpose: To allow the user to select a speficic   *
-     *          book to edit                             *
-     *****************************************************/
-    static int printBookEditMenu(Book book)
-    {
-        System.out.println("************************************");
-        System.out.println("             Edit Book              ");
-        System.out.println("************************************"); 
-        String[] menuOptions = {
-            "Add Author",
-            "Remove Author",
-            "Edit Author",
-            "Change Title",
-            "Change Year",
-            "Change Edition",
-            "Change ISBN",
-            "Toggle eBook",
-            "Delete Book (and exit menu)",
-            "Exit menu"
-        };
-
-        System.out.println();
-
-        System.out.printf("Title: %s\n", book.getTitle());
-        System.out.printf("Published: %s\n", book.getYear());
-        System.out.printf("ISBN: %s\n", book.getISBN());
-        System.out.printf("eBook: %b\n", book.isEbook());
-        System.out.printf("Edition: %d\n", book.getEdition());
-
-        for (int i = 0; i < book.getAuthorCount(); i++)
-        {
-            System.out.printf("Author:\n");
-            System.out.printf(" Name: %s %s\n", book.getAuthors()[i].getFirstName(), book.getAuthors()[i].getLastName());
-            System.out.printf(" Nationality: %s\n", book.getAuthors()[i].getNationality());
-            System.out.printf(" Born: %s\n", book.getAuthors()[i].getBirthYear());
-        }
-
-        System.out.println();
-        System.out.println("What would you like to do?");
-        
-        for (int i = 0; i < menuOptions.length; i++)
-        {
-            System.out.printf("%2d > %s\n", i+1, menuOptions[i]);
-        }
-        System.out.print("Your choice: ");
-        
-        return getBoundedInt(0, menuOptions.length + 1);
     }
 
     /*****************************************************
@@ -714,7 +547,7 @@ public class Library
         System.out.println();
         System.out.print("Select an author to remove: ");
 
-        chosen = getBoundedInt(0, books[bookIndex].getAuthorCount()+1) - 1;
+        chosen = input.getBoundedInt(0, books[bookIndex].getAuthorCount()+1) - 1;
         books[bookIndex].removeAuthor(chosen);
     }
 
@@ -758,7 +591,7 @@ public class Library
         }
         System.out.print("Select a book: ");
 
-        bookIndex = getBoundedInt(0, books.length + 1) - 1;
+        bookIndex = input.getBoundedInt(0, books.length + 1) - 1;
 
         System.out.println();
         System.out.println("************************************"); 
@@ -766,7 +599,7 @@ public class Library
         while (loop)
         {
             
-            switch (printBookEditMenu(books[bookIndex])) {
+            switch (printers.printBookEditMenu(input, books[bookIndex])) {
                 case 1:
                     addAuthorPrompt(books[bookIndex]);
                     break;
@@ -781,22 +614,22 @@ public class Library
     
                 case 4:
                     System.out.print("Enter new title: ");
-                    books[bookIndex].setTitle(getInput());
+                    books[bookIndex].setTitle(input.getInput());
                     break;
     
                 case 5:
                     System.out.print("Enter new year of publication: ");
-                    books[bookIndex].setYear(String.valueOf(getInt()));
+                    books[bookIndex].setYear(String.valueOf(input.getInt()));
                     break;
     
                 case 6:
                     System.out.print("Enter new Edition: ");
-                    books[bookIndex].setEdition(getInt());
+                    books[bookIndex].setEdition(input.getInt());
                     break;
     
                 case 7:
                     System.out.print("Enter new ISBN: ");
-                    books[bookIndex].setISBN(getInput());
+                    books[bookIndex].setISBN(input.getInput());
                     break;
                     
                 case 8:
@@ -873,27 +706,12 @@ public class Library
         System.out.println("************************************"); 
         System.out.println();
         System.out.println("List of Books:");
-        bookPrinter(books);
+        printers.bookPrinter(books);
         System.out.println("************************************");
         System.out.println();
     }
 
-    /*****************************************************
-     * Name   : printHelpPrompt                          *
-     * Date   : 08/10/2024                               *
-     * Import : None                                     *
-     * Export : None                                     *
-     * Purpose: prints usage help prompt                 *
-     *****************************************************/
-    static void printHelpPrompt()
-    {
-        System.out.println("Library system for COMP1007 (PDI) Assignment.");
-        System.out.println("Written by Orlando Morris-Johnson (22222598).");
-        System.out.println("");
-        System.out.println("Usage:");
-        System.out.println("\t-h\t--help\tDisplay this prompt.");
-        System.out.println("\t-f\t--file\tSpecify library data file location (default: .\\StartingDataFile.csv)");
-    }
+
 
     /*****************************************************
      * Name   : handleArgs                               *
@@ -911,13 +729,13 @@ public class Library
             return true;
         }
 
-        if ((args[0] == "-h") || (args[0] == "--help"))
+        if ((args[0].equals("-h")) || (args[0].equals("--help")))
         {
-            printHelpPrompt();
+            printers.printHelpPrompt();
             return false;
         }
 
-        if ((args[0] == "-f") || (args[0] == "--file"))
+        if ((args[0].equals("-f")) || (args[0].equals("--file")))
         {
             if (args.length == 1) 
             {
@@ -931,7 +749,7 @@ public class Library
             
                 if (dataFile.exists())
                 {
-                    filePath = args[1];
+                    csvTools.setFilePath(args[1]);
                     return true;
                 }
                 else
@@ -950,7 +768,7 @@ public class Library
 
         System.out.println("Error: unknown flags provided.");
         System.out.println("Printing usage information...");
-        printHelpPrompt();
+        printers.printHelpPrompt();
         return false;
     }
 
@@ -969,13 +787,13 @@ public class Library
         {
             try
             {
-                String[][] CSVData = csvReader();
+                String[][] CSVData = csvTools.csvReader();
                 genBooks(CSVData);
     
                 boolean loop = true;
                 while (loop)
                 {
-                    switch (printMenu()) {
+                    switch (printers.printMenu(input)) {
                         case 0:
                             clearScreen();
                             break;
@@ -998,12 +816,12 @@ public class Library
             
                         case 5:
                             addBook();
-                            writeCSV(books);
+                            csvTools.writeCSV(books);
                             break;
             
                         case 6:
                             editBook();
-                            writeCSV(books);
+                            csvTools.writeCSV(books);
                             break;
     
                         case 7:
@@ -1015,7 +833,7 @@ public class Library
                             
                     }
                 }
-                writeCSV(books);
+                csvTools.writeCSV(books);
                 System.out.println("Thank you for using the system!"); 
             }
             catch (Exception e)
