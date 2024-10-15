@@ -114,7 +114,6 @@ public class Book
             overwriteAuthor(i, authors[i+1]);
         }
 
-        System.out.println(i);
         authors[i] = null;
         authorCount -= 1;
     }
@@ -133,7 +132,7 @@ public class Book
         boolean duplicate = false;
 
         // Loop through authors of book
-        for (int i = 0; i < authorCount-1; i++)
+        for (int i = 0; i < authorCount; i++)
         {
             // Ensure we are not checking the suspected entry against itself
             if (i != authorIndex)

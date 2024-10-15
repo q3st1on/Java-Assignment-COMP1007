@@ -1,0 +1,10 @@
+File reading                : Complete
+File writing                : Complete
+View All Books              : Complete
+View all eBooks             : Complete
+View all non-eBooks         : Complete
+View an author’s books      : Complete
+Add Book                    : Complete
+Edit Book                   : Complete
+Edit author (in Edit Book)  : Complete
+Clear terminal easter egg   : Complete 

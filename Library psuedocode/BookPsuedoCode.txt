@@ -1,169 +1,195 @@
-package Library;
-import java.io.*;
-import java.util.*;
+CLASS Book
+    CLASS FIELDS:
+        authors (Author[])
+        authorCount (int)
+        eBook (boolean)
+        title (String)
+        isbn (String)
+        year (String)
+        edition (int)
 
-/*****************************************************
- * Author : Orlando Morris-Johnson (22222598)        *
- * Purpose: To store and manage information about    *
- *          books.                                   * 
- * Date   : 08/10/2024                               *
- *****************************************************/
-public class Book
-{
-    private Author[] authors = new Author[3];
-    private int authorCount = 0;
-    private boolean ebook;
-    private String title;
-    private String isbn;
-    private String year;
-    private int edition;
+    ACCESSOR: getAuthors
+    IMPORT: none
+    Export: authors (Author[])
+    ASSERTION: Returned copy of authors
+    ALGORITHM:
+        EXPORT COPY OF authors
 
-    //Getter functions to expose internal variables from book object
-    public Author[] getAuthors() { return authors; }
-    public boolean isEbook() { return ebook; }
-    public String getTitle() { return title; }
-    public String getISBN() { return isbn; }
-    public String getYear() { return year; }
-    public int getEdition() { return edition; }
-    public int getAuthorCount() { return authorCount; }
+    ALTERNATE ALGORITHM:
+        RETURN COPY OF authors
+    END getAuthors
+
+    ACCESSOR: isEbook
+    IMPORT: none
+    Export: ebook (boolean)
+    ASSERTION: Returned copy of ebook
+    ALGORITHM:
+        EXPORT COPY OF ebook
+
+    ALTERNATE ALGORITHM:
+        RETURN COPY OF ebook
+    END isEbook
+
+    ACCESSOR: getTitle
+    IMPORT: none
+    Export: title (String)
+    ASSERTION: Returned copy of title
+    ALGORITHM:
+        EXPORT COPY OF title
+
+    ALTERNATE ALGORITHM:
+        RETURN COPY OF title
+    END getTitle
+
+    ACCESSOR: getISBN
+    IMPORT: none
+    Export: isbn (String)
+    ASSERTION: Returned copy of isbn
+    ALGORITHM:
+        EXPORT COPY OF isbn
+
+    ALTERNATE ALGORITHM:
+        RETURN COPY OF isbn
+    END getISBN
+
+    ACCESSOR: getYear
+    IMPORT: none
+    Export: year (String)
+    ASSERTION: Returned copy of year
+    ALGORITHM:
+        EXPORT COPY OF year
+
+    ALTERNATE ALGORITHM:
+        RETURN COPY OF year
+    END getYear
+
+    ACCESSOR: getEdition
+    IMPORT: none
+    Export: edition (int)
+    ASSERTION: Returned copy of edition
+    ALGORITHM:
+        EXPORT COPY OF edition
+
+    ALTERNATE ALGORITHM:
+        RETURN COPY OF edition
+    END getEdition
+
+    ACCESSOR: getAuthorCount
+    IMPORT: none
+    Export: authorCount (int)
+    ASSERTION: Returned copy of authorCount
+    ALGORITHM:
+        EXPORT COPY OF authorCount
+
+    ALTERNATE ALGORITHM:
+        RETURN COPY OF authorCount
+    END getAuthorCount
     
-    //Setter functions to expose internal variables from book object
-    public void setEbook(boolean isEbook) { ebook = isEbook; }
-    public void setTitle(String newTitle) { title = newTitle; }
-    public void setISBN(String newISBN) { isbn = newISBN; }
-    public void setEdition(int newEdition) { edition = newEdition; }
-    public void setYear(String newYear) { year = newYear; }
+    MUTATOR: setEbook
+    IMPORT: isEbook (boolean)
+    EXPORT: none
+    ASSERTION: State of ebook is updated to isEbook
+    ALGORITHM:
+        ebook = isEbook
+    END setEbook  
 
-    /*****************************************************
-     * Name   : addAuthor                                *
-     * Date   : 08/10/2024                               *
-     * Import : newAuthor (Author)                       * 
-     * Export : None                                     *
-     * Purpose: To manage addition of authors to a book  *
-     *          and ensure no more than three are added  * 
-     *****************************************************/
-    public void addAuthor(Author newAuthor) {
-        // Check there is space for aditional author
-        if (authorCount < 3)
-        {
-            // Boolean to represent if Author is unique
-            boolean unique = true;
+    MUTATOR: setTitle
+    IMPORT: newTitle (String)
+    EXPORT: none
+    ASSERTION: State of title is updated to newTitle
+    ALGORITHM:
+        title = newTitle
+    END setTitle  
 
-            // Loop through all current authors of book
-            for (int i = 0; i < authorCount; i++)
-            {
-                // Check if new author is the same as existing author
-                if (newAuthor.hashCode() == authors[i].hashCode())
-                {
-                    unique = false;
-                }
-            }
+    MUTATOR: setISBN
+    IMPORT: newISBN (String)
+    EXPORT: none
+    ASSERTION: State of isbn is updated to newISBN
+    ALGORITHM:
+        isbn = newISBN
+    END setISBN 
 
-            if (unique)
-            {
-                // If author is unique, add them to the authors array
-                authors[authorCount] = newAuthor;
+    MUTATOR: setEdition
+    IMPORT: newEdition (int)
+    EXPORT: none
+    ASSERTION: State of edition is updated to newEdition
+    ALGORITHM:
+        edition = newEdition
+    END setEdition 
 
-                // Increment authorCount
-                authorCount ++;
-            }
-            else
-            {
-                // Print error message that the chosen author is already added to the book
-                System.err.println("Error: Author already added to book!");
-            }
-        }
-        else
-        {
-            System.err.println("Error: Cannot add more than 3 Authors to a book");
-        }
-    }
+    MUTATOR: setYear
+    IMPORT: newYear (String)
+    EXPORT: none
+    ASSERTION: State of year is updated to newYear
+    ALGORITHM:
+        year = newYear
+    END setYear
 
-    /*****************************************************
-     * Name   : overwriteAuthor                          *
-     * Date   : 08/10/2024                               *
-     * Import : index (int), newAuthor (Author)          * 
-     * Export : None                                     *
-     * Purpose: To overwrite specific author instance in *
-     *          the books authors array                  * 
-     *****************************************************/
-    public void overwriteAuthor(int index, Author newAuthor)
-    {
-        authors[index] = newAuthor;
-    }
+    MUTATOR: addAuthor
+    IMPORT: newAuthor (Author)
+    EXPORT: none
+    ASSERTION: State of authors is updated to include new author
+    ALGORITHM:
+        IF authorCount < 3 THEN
+            unique <- true
 
-    /*****************************************************
-     * Name   : removeAuthor                             *
-     * Date   : 08/10/2024                               *
-     * Import : index (int)                              * 
-     * Export : None                                     *
-     * Purpose: To remove specific author from authors   *
-     *          array and move other authors if needed   * 
-     *****************************************************/
-    public void removeAuthor(int index)
-    {        
-        int i;
+            FOR i <- 0 TO authorCount - 1 CHANGEBY 1
+                IF newAuthor = authors[i] THEN
+                    unique = false
+                ENDIF
+            ENDFOR
 
-        // Overwrite author at chosen position with null
-        authors[index] = null;
+            IF unique THEN
+                authors[authorCount] <- newAuthor
+                authorCount <- authorCount + 1
+            ELSE
+                ERROR "Error: Author already added to book!"
+            ENDIF
+        ELSE
+            ERROR "Error: Cannot add more than 3 Authors to a book"
+        ENDIF
+    END addAuthor
 
-        for (i = index; i < authorCount-1; i++)
-        {
-            // For each author from the chosen position to the final author in the book
-            // overwrite the author with the next author in the array
-            overwriteAuthor(i, authors[i+1]);
-        }
+    MUTATOR: overwriteAuthor
+    IMPORT: newAuthor (Author), index (int)
+    EXPORT: none
+    ASSERTION: State of authors is updated to change author at index to newAuthor
+    ALGORITHM:
+        authors[index] <- newAuthor
+    END overwriteAuthor
 
-        System.out.println(i);
-        authors[i] = null;
-        authorCount -= 1;
-    }
+    MUTATOR: removeAuthor
+    IMPORT: index (int)
+    EXPORT: none
+    ASSERTION: State of authors is updated to remove author at index
+    ALGORITHM:
+        authors[index] <- null
+
+        FOR i <- index TO authorCount - 2 CHANGEBY 1
+            overwriteAuthor(i, authors[i+1])
+        ENDFOR
+
+        authors[i] <- null
+        authorCount <- authorCount - 1
+    END removeAuthor
     
-    /*****************************************************
-     * Name   : pruneAuthors                             *
-     * Date   : 08/10/2024                               *
-     * Import : authorIndex (int)                        * 
-     * Export : None                                     *
-     * Purpose: To check if suspected duplicate author   * 
-     *          is in the authors array twice and if so  *
-     *          to remove the duplicate entry            *
-     *****************************************************/
-    public void pruneAuthors(int authorIndex)
-    {
-        boolean duplicate = false;
+    MUTATOR: pruneAuthors
+    IMPORT: authorIndex (int)
+    EXPORT: none
+    ASSERTION: State of authors is updated to remove duplicates of author at authorIndex
+    ALGORITHM:
+        duplicate <- false
+        FOR i <- 0 TO authorCount - 1 CHANGEBY 1
+            IF i != authorIndex THEN
+                IF authors[i] = authors[authorIndex] THEN
+                    duplicate <- true
+                ENDIF
+            ENDIF
+        ENDFOR
 
-        // Loop through authors of book
-        for (int i = 0; i < authorCount-1; i++)
-        {
-            // Ensure we are not checking the suspected entry against itself
-            if (i != authorIndex)
-            {
-                // Check if authors are equal
-                if (authors[i].hashCode() == authors[authorIndex].hashCode())
-                {
-                    // Mark duplicate as true if they are equal
-                    duplicate = true;
-                }
-            }
-        }
+        IF duplicate THEN
+            removeAuthor(authorIndex)
+        ENDIF
+    END pruneAuthors
 
-        // If the author is a duplicate, remove them from the array
-        if (duplicate)
-        {
-            removeAuthor(authorIndex);
-        }
-    }
-
-    /*****************************************************
-     * Name   : toString                                 *
-     * Date   : 08/10/2024                               *
-     * Import : None                                     * 
-     * Export : None                                     *
-     * Purpose: Creates toString function for testing    * 
-     *****************************************************/
-    @Override
-    public String toString()
-    {
-        return String.format("Title: %-30s | Year: %-6s | Author: %-20s | ISBN: %-14s | Edition: %-3d | Ebook: %b ", title, year, authors[0], isbn, edition, ebook);
-    }
-}
+END Book
