@@ -123,7 +123,7 @@ public class Library
      * Name   : getAuthorIndex                           *
      * Date   : 08/10/2024                               *
      * Import : checkAuthor (Author)                     *
-     * Export : None                                     *
+     * Export : value (int)                              *
      * Purpose: To find the index of a given author in   *
      *          authors array.                           *
      *****************************************************/
@@ -526,7 +526,7 @@ public class Library
     }
 
     /*****************************************************
-     * Name   : printBookEditMenu                        *
+     * Name   : removeAuthorPrompt                       *
      * Date   : 08/10/2024                               *
      * Import : bookIndex (int)                          *
      * Export : None                                     *

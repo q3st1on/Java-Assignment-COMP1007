@@ -223,7 +223,7 @@ ALGORITHM:
     PRINT "Is Book an eBook (y/n)? "
     input <- ""
     GET input
-    input <- input.toLowerCase()
+    input <- input.toLowerCASE()
     IF reply = "y" OR reply = "yes" OR reply = "t" OR reply = "true" THEN
         newBook.setEbook(true)
     ELSE
@@ -313,29 +313,28 @@ ALGORITHM:
                 GET input
                 books[bookIndex].getAuthors()[authorIndex].setFirstName(input)
             ENDCASE
-            case 2
+            CASE 2
                 PRINT "Enter new last name: "
                 input <- ""
                 GET input
                 books[bookIndex].getAuthors()[authorIndex].setLastName(input)
-                break
-            ENDCASE
-            case 3
+            ENDCASE            ENDCASE
+            CASE 3
                 PRINT "Enter new birth year: "
                 input <- "
                 GET input
                 books[bookIndex].getAuthors()[authorIndex].setBirthYear(input)
             ENDCASE
-            case 4
+            CASE 4
                 PRINT "Enter new nationality: "
                 input <- ""
                 GET input
                 books[bookIndex].getAuthors()[authorIndex].setNationality(input)
             ENDCASE
-            case 5
+            CASE 5
                 loop <- false
             ENDCASE
-            default
+            DEFAULT
                 ERROR "Please choose a valid menu option (enter 1-5)"
         ENDSWITCH
     ENDWHILE
@@ -347,195 +346,139 @@ ALGORITHM:
     ENDFOR
 END editAuthor
     
+METHOD: removeAuthorPrompt
+IMPORT: bookIndex (int)
+EXPORT: none
+ALGORITHM:
+    FOR  i <- 0 TO books[bookIndex].getAuthorCount() - 1 CHANGEBY 1
+        PRINT i+1 +"Author "
+        PRINT i+1 + " > Name: " + books[bookIndex].getAuthors()[i].toString()
+        PRINT i+1 + " > Nationality: " + books[bookIndex].getAuthors()[i].getNationality()
+        PRINT i+1 + " > Born: " + books[bookIndex].getAuthors()[i].getBirthYear()
+    ENDFOR
+
+    PRINT "Select an author to remove: "
+
+    input <- 0
+    GET input
+
+    books[bookIndex].removeAuthor(input)
+END removeAuthorPrompt
 
 
+METHOD: editBook
+IMPORT: none
+EXPORT: none
+ALGORITHM:
+    loop <- true
 
-/*****************************************************
-    * Name   : printBookEditMenu                        *
-    * Date   : 08/10/2024                               *
-    * Import : bookIndex (int)                          *
-    * Export : None                                     *
-    * Purpose: To allow the user to select a speficic   *
-    *          author of a book to remove               *
-    *****************************************************/
+    PRINT "************************************"
+    PRINT "            Select Book             "
+    PRINT "************************************" 
+    PRINT "List of Books:"
 
-static void removeAuthorPrompt(int bookIndex)
+    FOR  i <- 0 TO books.length - 1 CHANGEBY 1
+        PRINT "Book " + i+1
+        PRINT i+1 + " > Title: " + books[i].getTitle()
+        PRINTi+1 +  " > Published: " + books[i].getYear()
+        PRINT i+1 + " > ISBN: " + books[i].getISBN()
+        PRINT i+1 + " > eBook: " + books[i].isEbook()
+        PRINT i+1 + " > Edition: " + books[i].getEdition()
 
-    int chosen
-    FOR  i <- 0 i < books[bookIndex].getAuthorCount() CHANGEBY 1
+        FOR  j <- 0 TO books[i].getAuthorCount() - 1 CHANGEBY 1
+            PRINT i+1 + " > Author:"
+            PRINT i+1 + " >  Name: " books[i].getAuthors()[j].getFirstName() + " " + books[i].getAuthors()[j].getLastName()
+            PRINT i+1 + " >  Nationality: " + books[i].getAuthors()[j].getNationality()
+            PRINT i+1 + " >  Born: " + books[i].getAuthors()[j].getBirthYear()
+        ENDFOR
+    ENDFOR
     
-        PRINT "Author %d:\n", i+1)
-        PRINT "%2d > Name: %s\n", i+1, books[bookIndex].getAuthors()[i].toString())
-        PRINT "%2d > Nationality: %s\n", i+1, books[bookIndex].getAuthors()[i].getNationality())
-        PRINT "%2d > Born: %s\n", i+1, books[bookIndex].getAuthors()[i].getBirthYear())
-    
+    PRINT "Select a book: "
 
-    PRINT )
-    PRINT "Select an author to remove: ")
+    input <- 0
+    GET input
+    bookIndex <- input - 1
 
-    chosen <- input.getBoundedInt(0, books[bookIndex].getAuthorCount()+1) - 1
-    books[bookIndex].removeAuthor(chosen)
-
-
-/*****************************************************
-    * Name   : editBook                                 *
-    * Date   : 08/10/2024                               *
-    * Import : None                                     *
-    * Export : None                                     *
-    * Purpose: To allow the user to select a speficic   *
-    *          book and edit it                         *
-    *****************************************************/
-static void editBook()
-
-    int bookIndex
-    boolean loop <- true
-
-    PRINT "************************************")
-    PRINT "            Select Book             ")
-    PRINT "************************************") 
-    PRINT )
-    PRINT "List of Books:")
-    PRINT )
-
-    FOR  i <- 0 i < books.length CHANGEBY 1
-    
-        PRINT "Book %d:\n", i+1)
-        PRINT "%2d > Title: %s\n", i+1, books[i].getTitle())
-        PRINT "%2d > Published: %s\n", i+1, books[i].getYear())
-        PRINT "%2d > ISBN: %s\n", i+1, books[i].getISBN())
-        PRINT "%2d > eBook: %b\n", i+1, books[i].isEbook())
-        PRINT "%2d > Edition: %d\n", i+1, books[i].getEdition())
-
-        FOR  j <- 0 j < books[i].getAuthorCount() j++)
-        
-            PRINT "%2d > Author:\n", i+1)
-            PRINT "%2d >  Name: %s %s\n", i+1, books[i].getAuthors()[j].getFirstName(), books[i].getAuthors()[j].getLastName())
-            PRINT "%2d >  Nationality: %s\n", i+1, books[i].getAuthors()[j].getNationality())
-            PRINT "%2d >  Born: %s\n", i+1, books[i].getAuthors()[j].getBirthYear())
-        
-        PRINT )
-    
-    PRINT "Select a book: ")
-
-    bookIndex <- input.getBoundedInt(0, books.length + 1) - 1
-
-    PRINT )
     PRINT "************************************") 
 
-    while (loop)
-    
-        
-        switch (printers.printBookEditMenu(input, books[bookIndex])) 
-            case 1:
+    WHILE loop DO
+        SWITCH printBookEditMenu(input, books[bookIndex]) OF
+            CASE 1
                 addAuthorPrompt(books[bookIndex])
-                break
-
-            case 2:
+            ENDCASE
+            CASE 2
                 removeAuthorPrompt(bookIndex)
-                break
-
-            case 3:
+            ENDCASE
+            CASE 3
                 editAuthor(bookIndex)
-                break
-
-            case 4:
-                PRINT "Enter new title: ")
+            ENDCASE
+            CASE 4
+                PRINT "Enter new title: "
+                input <- ""
+                GET input
                 books[bookIndex].setTitle(input)
-                break
-
-            case 5:
-                PRINT "Enter new year of publication: ")
-                books[bookIndex].setYear(String.valueOf(input.getInt()))
-                break
-
-            case 6:
-                PRINT "Enter new Edition: ")
-                books[bookIndex].setEdition(input.getInt())
-                break
-
-            case 7:
-                PRINT "Enter new ISBN: ")
+            ENDCASE
+            CASE 5
+                PRINT "Enter new year of publication: "
+                input <- 0
+                GET input
+                books[bookIndex].setYear(String.valueOf(input))
+            ENDCASE
+            CASE 6
+                PRINT "Enter new Edition: "
+                input <- ""
+                GET input
+                books[bookIndex].setEdition(input)
+            ENDCASE
+            CASE 7
+                PRINT "Enter new ISBN: "
+                input <- ""
+                GET input
                 books[bookIndex].setISBN(input)
-                break
-                
-            case 8:
+            ENDCASE                
+            CASE 8
                 books[bookIndex].setEbook(!books[bookIndex].isEbook())
-                break
-
-            case 9:
+            ENDCASE
+            CASE 9
                 deleteBook(bookIndex)
                 loop <- false
-                break
-
-            case 10:
+            ENDCASE
+            CASE 10
                 loop <- false
-                break
-
-            default:
-                System.err.println("Please choose a valid menu option (enter 1-9)")
-                
-        
+            ENDCASE
+            DEFAULT
+                ERROR "Please choose a valid menu option (enter 1-9)"
+        ENDSWITCH
+    ENDWHILE
     
-    
-    PRINT "************************************")
-    PRINT )
+    PRINT "************************************"
+END editBook
 
-
-/*****************************************************
-    * Name   : deleteBook                               *
-    * Date   : 08/10/2024                               *
-    * Import : bookIndex (int)                          *
-    * Export : None                                     *
-    * Purpose: To allow the user to delete a speficic   *
-    *          book                                     *
-    *****************************************************/
-static void deleteBook(int bookIndex)
-
-    int i
+METHOD: deleteBook
+IMPORT: bookIndex (int)
+EXPORT: none
+ALGORITHM:
     books[bookIndex] <- null
     
-    FOR EACH i <- bookIndex i < books.length-1 CHANGEBY 1
-    
+    FOR EACH i <- bookIndex  TO books.length - 2 CHANGEBY 1
         books[i] <- books[i+1]
-    
-    
+    ENDFOR
+
     books[i] <- null
+    books.pop()
+END deleteBook
 
-    Book[] newBooks <- Arrays.copyOf(books, books.length-1)
-    books <- newBooks
-
-
-/*****************************************************
-    * Name   : clearScreen                              *
-    * Date   : 08/10/2024                               *
-    * Import : None                                     *
-    * Export : None                                     *
-    * Purpose: implements clear screen easter egg       *
-    *****************************************************/
-static void clearScreen()
-
-    PRINT "\033[H\033[2J") 
-    System.out.flush()
-
-
-/*****************************************************
-    * Name   : printAllBooks                            *
-    * Date   : 08/10/2024                               *
-    * Import : None                                     *
-    * Export : None                                     *
-    * Purpose: prints all books                         *
-    *****************************************************/
-static void printAllBooks()
-
-    PRINT "************************************")
-    PRINT "             All Books              ")
-    PRINT "************************************") 
-    PRINT )
-    PRINT "List of Books:")
-    printers.bookPrinter(books)
-    PRINT "************************************")
-    PRINT )
-
+METHOD: printAllBooks
+IMPORT: none
+EXPORT: none
+ALGORITHM:
+    PRINT "************************************"
+    PRINT "             All Books              "
+    PRINT "************************************"
+    PRINT "List of Books:"
+    bookPrinter(books)
+    PRINT "************************************"
+END printAllBooks
 
 
 
@@ -548,17 +491,22 @@ static void printAllBooks()
     *          Allows users to specify alternate data   *
     *          file locations.                          *
     *****************************************************/
-static boolean handleArgs(String[] args)
+METHOD: handleArgs
+IMPORT: args (String[])  
+EXPORT: value (boolean)
+ALGORITHM:
+    value <- false
 
-    IF args.length = 0)
-    
-        return true
-    
+    IF args.length = 0 THEN
+        value <- true
+        return
+    ENDIF
 
-    IF (args[0] = "-h")) OR (args[0] = "--help")))
-    
-        printers.printHelpPrompt()
-        return false
+    IF args[0] = "-h" OR args[0] = "--help" THEN
+        printHelpPrompt()
+        value <- false
+        return
+    ENDIF
     
 
     IF (args[0] = "-f")) OR (args[0] = "--file")))
@@ -569,7 +517,7 @@ static boolean handleArgs(String[] args)
             return false
         
 
-        PRINT "Reading from data file %s\n", args[1])
+        PRINT "Reading from data file ", args[1])
         try 
             File dataFile <- new File(args[1])
         
@@ -580,7 +528,7 @@ static boolean handleArgs(String[] args)
             
             ELSE
             
-                PRINT "Error: Could not open file located at %s\n", args[1])
+                PRINT "Error: Could not open file located at ", args[1])
                 return false
             
         
@@ -620,40 +568,32 @@ public static void main(String[] args)
             while (loop)
             
                 switch (printers.printMenu(input)) 
-                    case 0:
+                    CASE 0:
                         clearScreen()
-                        break
-
-                    case 1:
+                    ENDCASE
+                    CASE 1:
                         printAllBooks()
-                        break
-        
-                    case 2:
+                    ENDCASE        
+                    CASE 2:
                         eBooks()
-                        break
-        
-                    case 3:
+                    ENDCASE        
+                    CASE 3:
                         noneBooks()
-                        break
-        
-                    case 4:
+                    ENDCASE        
+                    CASE 4:
                         booksByAuthor()
-                        break
-        
-                    case 5:
+                    ENDCASE        
+                    CASE 5:
                         addBook()
                         csvTools.writeCSV(books)
-                        break
-        
-                    case 6:
+                    ENDCASE        
+                    CASE 6:
                         editBook()
                         csvTools.writeCSV(books)
-                        break
-
-                    case 7:
+                    ENDCASE
+                    CASE 7:
                         loop <- false
-                        break
-                        
+                    ENDCASE                        
                     default:
                         System.err.println("Please choose a valid menu option (enter 1-7)")
                         
