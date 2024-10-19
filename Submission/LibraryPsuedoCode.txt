@@ -1,0 +1,1079 @@
+CLASS Author
+    CLASS FIELDS:
+        familyName (String)
+        firstName (String)
+        nationality (String)
+        birthYear (String)
+        books (Book[])
+ 
+    ACCESSOR: getFirstName
+    IMPORT: none
+    Export: firstName 
+    ASSERTION: Returned the first name
+    ALGORITHM:
+        EXPORT COPY OF firstName
+
+    ALTERNATE ALGORITHM:
+        RETURN COPY OF firstName
+    END getFirstName
+
+    ACCESSOR: getLastName
+    IMPORT: none
+    EXPORT: familyName 
+    ASSERTION: Returned the last name
+    ALGORITHM:
+        EXPORT COPY OF familyName
+
+    ALTERNATE ALGORITHM:
+        RETURN COPY OF familyName
+    END getLastName
+    
+    ACCESSOR: getNationality
+    IMPORT: none
+    EXPORT: nationality 
+    ASSERTION: Returned the nationality
+    ALGORITHM:
+        EXPORT COPY OF nationality
+
+    ALTERNATE ALGORITHM:
+        RETURN COPY OF nationality
+    END getNationality
+    
+    ACCESSOR: getBirthYear
+    IMPORT: none
+    EXPORT: birthYear 
+    ASSERTION: Returned the birth year
+    ALGORITHM:
+        EXPORT COPY OF birthYear
+
+    ALTERNATE ALGORITHM:
+        RETURN COPY OF birthYear
+    END getBirthYear
+    
+    ACCESSOR: getBooks
+    IMPORT: none
+    EXPORT: books (Books[])
+    ASSERTION: Returned the books array
+    ALGORITHM:
+        EXPORT COPY OF books
+
+    ALTERNATE ALGORITHM:
+        RETURN COPY OF books
+    END getBooks
+    
+
+    MUTATOR: setFirstName
+    IMPORT: newFirstName (String)
+    EXPORT: none
+    ASSERTION: State of firstName is updated to newFirstName
+    ALGORITHM:
+        firstName = newFirstName
+    END setFirstName  
+    
+    MUTATOR: setLastName
+    IMPORT: newLastName (String)
+    EXPORT: none
+    ASSERTION: State of familyName is updated to newLastName
+    ALGORITHM:
+        familyName = newLastName 
+    END setLastName 
+    
+    MUTATOR: setNationality
+    IMPORT: newNationality (String)
+    EXPORT: none
+    ASSERTION: State of nationality is updated to newNationality
+    ALGORITHM:
+        nationality = newNationality 
+    END setNationality 
+    
+    MUTATOR: setBirthYear
+    IMPORT: newBirthYear (String)
+    EXPORT: none
+    ASSERTION: State of birthYear is updated to newBirthYear
+    ALGORITHM:
+        birthYear = newBirthYear 
+    END setBirthYear 
+    
+    MUTATOR: addBook
+    IMPORT: newBook (Book)
+    EXPORT: none
+    ASSERTION: State of books array is updated to include newBook
+    ALGORITHM:
+        books.append(newBook)
+    END addBook
+END Author
+
+CLASS Book
+    CLASS FIELDS:
+        authors (Author[])
+        authorCount (int)
+        eBook (boolean)
+        title (String)
+        isbn (String)
+        year (String)
+        edition (int)
+
+    ACCESSOR: getAuthors
+    IMPORT: none
+    Export: authors (Author[])
+    ASSERTION: Returned copy of authors
+    ALGORITHM:
+        EXPORT COPY OF authors
+
+    ALTERNATE ALGORITHM:
+        RETURN COPY OF authors
+    END getAuthors
+
+    ACCESSOR: isEbook
+    IMPORT: none
+    Export: ebook (boolean)
+    ASSERTION: Returned copy of ebook
+    ALGORITHM:
+        EXPORT COPY OF ebook
+
+    ALTERNATE ALGORITHM:
+        RETURN COPY OF ebook
+    END isEbook
+
+    ACCESSOR: getTitle
+    IMPORT: none
+    Export: title (String)
+    ASSERTION: Returned copy of title
+    ALGORITHM:
+        EXPORT COPY OF title
+
+    ALTERNATE ALGORITHM:
+        RETURN COPY OF title
+    END getTitle
+
+    ACCESSOR: getISBN
+    IMPORT: none
+    Export: isbn (String)
+    ASSERTION: Returned copy of isbn
+    ALGORITHM:
+        EXPORT COPY OF isbn
+
+    ALTERNATE ALGORITHM:
+        RETURN COPY OF isbn
+    END getISBN
+
+    ACCESSOR: getYear
+    IMPORT: none
+    Export: year (String)
+    ASSERTION: Returned copy of year
+    ALGORITHM:
+        EXPORT COPY OF year
+
+    ALTERNATE ALGORITHM:
+        RETURN COPY OF year
+    END getYear
+
+    ACCESSOR: getEdition
+    IMPORT: none
+    Export: edition (int)
+    ASSERTION: Returned copy of edition
+    ALGORITHM:
+        EXPORT COPY OF edition
+
+    ALTERNATE ALGORITHM:
+        RETURN COPY OF edition
+    END getEdition
+
+    ACCESSOR: getAuthorCount
+    IMPORT: none
+    Export: authorCount (int)
+    ASSERTION: Returned copy of authorCount
+    ALGORITHM:
+        EXPORT COPY OF authorCount
+
+    ALTERNATE ALGORITHM:
+        RETURN COPY OF authorCount
+    END getAuthorCount
+    
+    MUTATOR: setEbook
+    IMPORT: isEbook (boolean)
+    EXPORT: none
+    ASSERTION: State of ebook is updated to isEbook
+    ALGORITHM:
+        ebook = isEbook
+    END setEbook  
+
+    MUTATOR: setTitle
+    IMPORT: newTitle (String)
+    EXPORT: none
+    ASSERTION: State of title is updated to newTitle
+    ALGORITHM:
+        title = newTitle
+    END setTitle  
+
+    MUTATOR: setISBN
+    IMPORT: newISBN (String)
+    EXPORT: none
+    ASSERTION: State of isbn is updated to newISBN
+    ALGORITHM:
+        isbn = newISBN
+    END setISBN 
+
+    MUTATOR: setEdition
+    IMPORT: newEdition (int)
+    EXPORT: none
+    ASSERTION: State of edition is updated to newEdition
+    ALGORITHM:
+        edition = newEdition
+    END setEdition 
+
+    MUTATOR: setYear
+    IMPORT: newYear (String)
+    EXPORT: none
+    ASSERTION: State of year is updated to newYear
+    ALGORITHM:
+        year = newYear
+    END setYear
+
+    MUTATOR: addAuthor
+    IMPORT: newAuthor (Author)
+    EXPORT: none
+    ASSERTION: State of authors is updated to include new author
+    ALGORITHM:
+        IF authorCount < 3 THEN
+            unique <- true
+
+            FOR i <- 0 TO authorCount - 1 CHANGEBY 1
+                IF newAuthor = authors[i] THEN
+                    unique = false
+                ENDIF
+            ENDFOR
+
+            IF unique THEN
+                authors[authorCount] <- newAuthor
+                authorCount <- authorCount + 1
+            ELSE
+                ERROR "Error: Author already added to book!"
+            ENDIF
+        ELSE
+            ERROR "Error: Cannot add more than 3 Authors to a book"
+        ENDIF
+    END addAuthor
+
+    MUTATOR: overwriteAuthor
+    IMPORT: newAuthor (Author), index (int)
+    EXPORT: none
+    ASSERTION: State of authors is updated to change author at index to newAuthor
+    ALGORITHM:
+        authors[index] <- newAuthor
+    END overwriteAuthor
+
+    MUTATOR: removeAuthor
+    IMPORT: index (int)
+    EXPORT: none
+    ASSERTION: State of authors is updated to remove author at index
+    ALGORITHM:
+        authors[index] <- null
+
+        FOR i <- index TO authorCount - 2 CHANGEBY 1
+            overwriteAuthor(i, authors[i+1])
+        ENDFOR
+
+        authors[i] <- null
+        authorCount <- authorCount - 1
+    END removeAuthor
+    
+    MUTATOR: pruneAuthors
+    IMPORT: authorIndex (int)
+    EXPORT: none
+    ASSERTION: State of authors is updated to remove duplicates of author at authorIndex
+    ALGORITHM:
+        duplicate <- false
+        FOR i <- 0 TO authorCount - 1 CHANGEBY 1
+            IF i != authorIndex THEN
+                IF authors[i] = authors[authorIndex] THEN
+                    duplicate <- true
+                ENDIF
+            ENDIF
+        ENDFOR
+
+        IF duplicate THEN
+            removeAuthor(authorIndex)
+        ENDIF
+    END pruneAuthors
+END Book
+
+METHOD: verifyHeader
+IMPORT: testHeader (String[])
+EXPORT: result
+ALGORITHM:    
+    result <- false
+    IF csvHeader = testHeader THEN
+        result <- true
+    ENDIF
+END verifyHeader
+
+METHOD: csvReader
+IMPORT: None
+EXPORT: data (String[][])
+ALGORITHM:    
+    empty <- true
+    data <- [[]]
+    file <- File(filePath)
+
+    line <- file.readLine()
+    WHILE line != null DO
+        IF empty THEN
+            data[0] <- line.split(",")
+            empty <- false
+        ELSE
+            data.append(line)
+        ENDIF
+
+        line <- br.readLine()
+    ENDWHILE
+
+    file.close()
+END csvReader
+
+METHOD: writeCSVLine
+IMPORT: data (String[]), file (FileOutputStream)
+EXPORT: None
+ALGORITHM:  
+    FOR i <- 0 TO data.length - 1 CHANGEBY 1
+        file.write(data[i])
+        file.write(",")
+    ENDFOR
+
+    file.write(data[data.length-1])
+    file.write("\n")
+END writeCSVLine
+
+METHOD: writeCSV
+IMPORT: None
+EXPORT: None
+ALGORITHM:  
+    tempFile <- new File(".libraryDataFile.tmp")
+    fileStream <- new FileOutputStream(tempFile)
+    writeCSVLine(csvHeader, fileStream)
+    
+    FOR EACH book IN books    
+        array[0] <- book.getTitle()
+        FOR i <- 0 TO 3 CHANGEBY 1
+            IF i < book.getAuthorCount() THEN
+                array[1+(i*4)] <- book.getAuthors()[i].getLastName()
+                array[2+(i*4)] <- book.getAuthors()[i].getFirstName()
+                array[3+(i*4)] <- book.getAuthors()[i].getNationality()
+                array[4+(i*4)] <- book.getAuthors()[i].getBirthYear()
+            ELSE
+                array[1+(i*4)] <- ""
+                array[2+(i*4)] <- ""
+                array[3+(i*4)] <- ""
+                array[4+(i*4)] <- ""
+            ENDIF
+        ENDFOR
+        
+        array[13] <- book.getYear()
+        array[14] <- book.getISBN()
+        IF book.isEbook() THEN
+            array[15] <- "TRUE"
+        ELSE
+            array[15] <- "FALSE"
+        END IF
+
+        array[16] <- String.valueOf(book.getEdition())
+        writeCSVLine(array, fileStream)
+    END FOR
+
+    fileStream.flush()
+    fileStream.close()
+
+    tempFile.renameTo(outFile)
+END writeCSV
+
+METHOD: printMenu
+IMPORT: None
+EXPORT: input
+ALGORITHM:    
+    menuOptions <- ["View all Books","View eBooks","View non-eBooks","View an author\'s Books","Add Book","Edit Book","Exit"]
+
+    PRINT "************************************"
+    PRINT "       Welcome to the Library       "
+    PRINT "************************************"
+    
+    FOR i <- 0 TO menuOptions.length - 1 CHANGEBY 1
+        PRINT i+1 + " > " + menuOptions[i]
+    ENDFOR
+
+    PRINT "************************************"
+    PRINT "Your choice: "
+    
+    input <- 0
+    GET input
+END printMenu
+
+
+METHOD: bookPrinter
+IMPORT: bookArray
+EXPORT: None
+ALGORITHM:    
+    IF bookArray[0] = null THEN
+        PRINT "No Books Found"
+    ELSE
+        FOR EACH book IN bookArray 
+            PRINT "Book:"
+            PRINT " Title: " + book.getTitle()
+            PRINT " Published: " + book.getYear()
+            PRINT " ISBN: " + book.getISBN()
+            PRINT " eBook: " + book.isEbook()
+            PRINT " Edition: " + book.getEdition()
+
+            FOR i <- 0 TO book.getAuthorCount()-1 CHANGEBY 1
+                PRINT " Author:"
+                PRINT "  Name: " + book.getAuthors()[i].getFirstName() + book.getAuthors()[i].getLastName()
+                PRINT "  Nationality: " + book.getAuthors()[i].getNationality()
+                PRINT "  Born: " + book.getAuthors()[i].getBirthYear()
+            ENDFOR
+        ENDFOR
+    ENDIF        
+END bookPrinter
+    
+
+
+METHOD: printHelpPrompt
+IMPORT: None
+EXPORT: None
+ALGORITHM:
+    PRINT "Library system for COMP1007 (PDI) Assignment."
+    PRINT "Written by Orlando Morris-Johnson (22222598)."
+    PRINT ""
+    PRINT "Usage:"
+    PRINT "\t-h\t--help\tDisplay this prompt."
+    PRINT "\t-f\t--file\tSpecify library data file location (default: .\\StartingDataFile.csv)"
+END printHelpPrompt
+
+METHOD: printAuthorEditMenu
+IMPORT: author
+EXPORT: input
+ALGORITHM:    
+    PRINT "************************************"
+    PRINT "            Edit Author             "
+    PRINT "************************************" 
+    menuOptions <- ["Change First Name","Change Last Name","Change Birth Year","Change Nationality","Exit menu"]
+    
+    PRINT "Author:\n"
+    PRINT " Name: %s " +author.getFirstName(), author.getLastName()
+    PRINT " Nationality: " + author.getNationality()
+    PRINT " Born: " + author.getBirthYear()
+
+    PRINT "What would you like to do?"
+
+    FOR i <- 0 TO menuOptions.length - 1 CHANGEBY 1
+        PRINT i+1 + " > " + menuOptions[i]
+    ENDFOR
+
+    PRINT "************************************"
+
+    PRINT "Your choice: "
+    
+    input <- 0
+    GET input
+END printAuthorEditMenu
+
+METHOD: printBookEditMenu
+IMPORT: Book book
+EXPORT: input
+ALGORITHM:    
+    PRINT "************************************"
+    PRINT "             Edit Book              "
+    PRINT "************************************" 
+    menuOptions <- ["Add Author","Remove Author","Edit Author","Change Title","Change Year","Change Edition","Change ISBN","Toggle eBook","Delete Book (and exit menu)","Exit menu"]
+    
+    PRINT "Title: " + book.getTitle()
+    PRINT "Published: " + book.getYear()
+    PRINT "ISBN: " + book.getISBN()
+    PRINT "eBook: " + book.isEbook()
+    PRINT "Edition: " + book.getEdition()
+
+    FOR i <- 0 TO book.getAuthorCount()-1 CHANGEBY i++
+        PRINT "Author:\n"
+        PRINT " Name: %s " + book.getAuthors()[i].getFirstName(), book.getAuthors()[i].getLastName()
+        PRINT " Nationality: " + book.getAuthors()[i].getNationality()
+        PRINT " Born: " + book.getAuthors()[i].getBirthYear()
+    ENDFOR
+
+    PRINT "What would you like to do?"
+    
+    FOR i <- 0 TO menuOptions.length - 1 CHANGEBY 1
+        PRINT i+1 + " > " + menuOptions[i]
+    ENDFOR
+    
+    PRINT "Your choice: "
+    
+    input <- 0
+    GET input
+END printBookEditMenu
+
+METHOD: writeCSV
+IMPORT: newAuthor (Author)
+EXPORT: None
+ALGORITHM:
+    IF authors[0] = null THEN
+        authors[0] <- newAuthor
+    ELSE
+        unique <- true
+        newAuthorHash <- newAuthor.hashCode()
+        FOR EACH Author IN authors
+            IF author.hashCode() = newAuthorHash THEN
+                unique <- false
+                FOR EACH Book IN newAuthor.getBooks()
+                    author.addBook(book)
+                    FOR  i <- 0 TO book.getAuthorCount() - 1 CHANGEBY i++
+                        IF book.getAuthors()[i] = newAuthor THEN
+                            book.overwriteAuthor(i, author)
+                        ENDIF
+                    ENDFOR
+                ENDFOR
+            ENDIF
+        ENDFOR
+    ENDIF
+    IF unique THEN
+        authors.append(newAuthor)
+    ENDIF
+END addAuthors
+        
+    
+
+
+METHOD: pruneAuthors
+IMPORT: checkAuthor (Author)
+EXPORT: None
+ALGORITHM:
+    checkAuthorHash <- checkAuthor.hashCode()
+    FOR testAuthorIndex <- 0 TO authors.length - 1 CHANGEBY 1
+        IF authors[testAuthorIndex].hashCode() = checkAuthorHash THEN
+            IF authors[testAuthorIndex] != checkAuthor THEN
+                IF checkAuthor.getBooks() = authors[testAuthorIndex].getBooks() THEN
+                    deleteAuthor(testAuthorIndex)
+                ELSE
+                    checkAuthorIndex <- getAuthorIndex(checkAuthor)
+                    checkAuthorBooks <- checkAuthor.getBooks().length
+                    testAuthorBooks <- authors[testAuthorIndex].getBooks().length
+                    
+                    IF testAuthorBooks > checkAuthorBooks THEN
+                        deleteAuthor(checkAuthorIndex)
+                    ELSE
+                        deleteAuthor(testAuthorIndex)
+                    ENDIF
+                ENDIF
+            ENDIF
+        ENDIF
+    ENDFOR
+END pruneAuthors
+                
+METHOD: getAuthorIndex
+IMPORT: checkAuthor (Author)
+EXPORT: index (int)
+ALGORITHM:
+    index <- 0
+    FOR  i <- 0  TO authors.length - 1 CHANGEBY 1 
+        IF authors[i] = checkAuthor THEN
+            index <- i
+            i <- authors.length
+        ENDIF
+    ENDFOR
+END getAuthorIndex
+
+METHOD: deleteAuthor
+IMPORT: authorIndex (int)
+EXPORT: none
+ALGORITHM:
+    authors[authorIndex] <- null
+
+    FOR i <- authorIndex TO authors.length - 2 CHANGEBY 1
+        authors[i] <- authors[i+1]
+    END FOR
+
+    authors[i] <- null
+    authors.pop()
+END deleteAuthor
+
+
+METHOD: genBooks
+IMPORT: CSVData (String[])
+EXPORT: none
+ALGORITHM:
+    IF csvTools.verifyHeader(csvData[0]) THEN
+        ERROR "Incorrect Data File: CSV header is incorrect."
+    ENDIF
+    FOR  i <- 1 TO csvData.length - 1 CHANGEBY 1 
+        newBook.setTitle(csvData[i][0])
+        newBook.setYear(csvData[i][13])
+        newBook.setISBN(csvData[i][14])
+        newBook.setEbook(csvData[i][15] = "TRUE")
+        newBook.setEdition(Integer.parseInt(csvData[i][16]))
+        FOR  j <- 0 TO 3 CHANGEBY 1
+            IF csvData[i][1+(j*4)] != "" THEN
+                newAuthor.setLastName(csvData[i][1 + (j*4)])
+                newAuthor.setFirstName(csvData[i][2 + (j*4)])
+                newAuthor.setNationality(csvData[i][3 + (j*4)])
+                newAuthor.setBirthYear(csvData[i][4 + (j*4)])
+                newAuthor.addBook(newBook)
+                newBook.addAuthor(newAuthor)
+                addAuthors(newAuthor)
+            ENDIF
+        ENDFOR
+        books.append(newBook)
+    ENDFOR
+END genBooks
+
+METHOD: booksByAuthor
+IMPORT: none
+EXPORT: none
+ALGORITHM:
+    PRINT "************************************"
+    PRINT "          Books by Author           "
+    PRINT "************************************"
+    PRINT "List of Authors:"
+
+    FOR  i <- 0 TO authors.length - 1 CHANGEBY 1
+        PRINT i+1 + " > " authors[i]
+    ENDFOR
+
+    PRINT "Select an Author: "
+
+    input <- 0
+    GET input
+
+    bookPrinter(authors[input].getBooks())
+
+    PRINT "************************************"
+END booksByAuthor
+
+METHOD: eBooks
+IMPORT: none
+EXPORT: none
+ALGORITHM:
+    PRINT "************************************"
+    PRINT "               eBooks               "
+    PRINT "************************************"
+
+    foundBooks <- []
+    
+    FOR EACH book IN books
+        IF book.isEbook() THEN
+            foundBooks.append(book)
+        ENDIF
+    ENDFOR
+
+    bookPrinter(foundBooks)
+
+    PRINT "************************************"
+END ebook
+
+METHOD: noneBooks
+IMPORT: none
+EXPORT: none
+ALGORITHM:
+    PRINT "************************************"
+    PRINT "             Non-eBooks             "
+    PRINT "************************************"
+
+    foundBooks <- []
+    
+    FOR EACH book IN books
+        IF !book.isEbook() THEN
+            foundBooks.append(book)
+        ENDIF
+    ENDFOR
+
+    bookPrinter(foundBooks)
+
+    PRINT "************************************"
+END noneBooks
+
+METHOD: addBook
+IMPORT: none
+EXPORT: none
+ALGORITHM:
+    PRINT "************************************"
+    PRINT "              Add Book              "
+    PRINT "************************************" 
+
+    Book newBook <- new Book()
+
+    PRINT "Enter Book Title: "
+    input <- ""
+    GET input
+    newBook.setTitle(input)
+
+    PRINT "Enter Book Year: "
+    input <- ""
+    GET input
+    newBook.setYear(input)
+
+    PRINT "Enter Book ISBN: "
+    input <- ""
+    GET input
+    newBook.setISBN(input)
+
+    PRINT "Enter Book Edition: "
+    input <- 0
+    GET input
+    newBook.setEdition(input)
+
+    PRINT "Is Book an eBook (y/n)? "
+    input <- ""
+    GET input
+    input <- input.toLowerCASE()
+    IF reply = "y" OR reply = "yes" OR reply = "t" OR reply = "true" THEN
+        newBook.setEbook(true)
+    ELSE
+        newBook.setEbook(false)
+    ENDIF
+
+    PRINT "How many Authors are there?"
+    input <- 0
+    GET input
+    FOR i <- 0 TO input - 1 CHANGEBY 1
+        addAuthorPrompt(newBook)
+    ENDFOR
+
+    books.append(newBook)
+
+    PRINT "************************************"
+END addBook
+
+METHOD: addAuthorPrompt
+IMPORT: book (Book)
+EXPORT: none
+ALGORITHM:
+    IF book.getAuthorCount() >= 3 THEN
+        ERROR "Error: Cannot add more than 3 authors!"
+    ENDIF
+
+    PRINT "************************************"
+    PRINT "             Add Author             "
+    PRINT "************************************"
+
+    PRINT "Enter Author First Name: "
+    input <- ""
+    GET input
+    newAuthor.setFirstName(input)
+
+    PRINT "Enter Author Last Name: "
+    input <- ""
+    GET input
+    newAuthor.setLastName(input)
+
+    PRINT "Enter Author Nationality: "
+    input <- ""
+    GET input
+    newAuthor.setNationality(input)
+
+    PRINT "Enter Author Birth Year: "
+    input <- ""
+    GET input
+    newAuthor.setBirthYear(input)
+
+    newAuthor.addBook(book)
+    book.addAuthor(newAuthor)
+
+    addAuthors(newAuthor)
+    
+    PRINT "************************************"
+END addAuthorPrompt
+
+METHOD: editAuthor
+IMPORT: bookIndex (int)
+EXPORT: none
+ALGORITHM:
+    PRINT "************************************"
+    PRINT "            Edit Author             "
+    PRINT "************************************"
+
+    loop <- true
+
+    PRINT "List of Authors:"
+
+    FOR  i <- 0 TO books[bookIndex].getAuthorCount() - 1 CHANGEBY 1
+        PRINT "Author " + i+1
+        PRINT i+1 + " > Name: " + books[bookIndex].getAuthors()[i].getFirstName() + books[bookIndex].getAuthors()[i].getLastName()
+        PRINT i+1 + " > Nationality: " + books[bookIndex].getAuthors()[i].getNationality()
+        PRINT i+1 + " > Born: " + books[bookIndex].getAuthors()[i].getBirthYear()
+    ENDFOR
+
+    PRINT "Select an Author: "
+    input <- 0
+    GET input
+    authorIndex <- input - 1
+    WHILE loop DO
+        SWITCH printAuthorEditMenu(input, books[bookIndex].getAuthors()[authorIndex]) OF
+            CASE 1
+                PRINT "Enter new first name: "
+                input <- ""
+                GET input
+                books[bookIndex].getAuthors()[authorIndex].setFirstName(input)
+            ENDCASE
+            CASE 2
+                PRINT "Enter new last name: "
+                input <- ""
+                GET input
+                books[bookIndex].getAuthors()[authorIndex].setLastName(input)
+            ENDCASE            ENDCASE
+            CASE 3
+                PRINT "Enter new birth year: "
+                input <- "
+                GET input
+                books[bookIndex].getAuthors()[authorIndex].setBirthYear(input)
+            ENDCASE
+            CASE 4
+                PRINT "Enter new nationality: "
+                input <- ""
+                GET input
+                books[bookIndex].getAuthors()[authorIndex].setNationality(input)
+            ENDCASE
+            CASE 5
+                loop <- false
+            ENDCASE
+            DEFAULT
+                ERROR "Please choose a valid menu option (enter 1-5)"
+        ENDSWITCH
+    ENDWHILE
+
+    books[bookIndex].pruneAuthors(authorIndex)
+
+    FOR i <- 0 TO books[bookIndex].getAuthorCount() - 1 CHANGEBY 1
+        pruneAuthors(books[bookIndex].getAuthors()[i])
+    ENDFOR
+END editAuthor
+    
+METHOD: removeAuthorPrompt
+IMPORT: bookIndex (int)
+EXPORT: none
+ALGORITHM:
+    FOR  i <- 0 TO books[bookIndex].getAuthorCount() - 1 CHANGEBY 1
+        PRINT i+1 +"Author "
+        PRINT i+1 + " > Name: " + books[bookIndex].getAuthors()[i].toString()
+        PRINT i+1 + " > Nationality: " + books[bookIndex].getAuthors()[i].getNationality()
+        PRINT i+1 + " > Born: " + books[bookIndex].getAuthors()[i].getBirthYear()
+    ENDFOR
+
+    PRINT "Select an author to remove: "
+
+    input <- 0
+    GET input
+
+    books[bookIndex].removeAuthor(input)
+END removeAuthorPrompt
+
+
+METHOD: editBook
+IMPORT: none
+EXPORT: none
+ALGORITHM:
+    loop <- true
+
+    PRINT "************************************"
+    PRINT "            Select Book             "
+    PRINT "************************************" 
+    PRINT "List of Books:"
+
+    FOR  i <- 0 TO books.length - 1 CHANGEBY 1
+        PRINT "Book " + i+1
+        PRINT i+1 + " > Title: " + books[i].getTitle()
+        PRINTi+1 +  " > Published: " + books[i].getYear()
+        PRINT i+1 + " > ISBN: " + books[i].getISBN()
+        PRINT i+1 + " > eBook: " + books[i].isEbook()
+        PRINT i+1 + " > Edition: " + books[i].getEdition()
+
+        FOR  j <- 0 TO books[i].getAuthorCount() - 1 CHANGEBY 1
+            PRINT i+1 + " > Author:"
+            PRINT i+1 + " >  Name: " books[i].getAuthors()[j].getFirstName() + " " + books[i].getAuthors()[j].getLastName()
+            PRINT i+1 + " >  Nationality: " + books[i].getAuthors()[j].getNationality()
+            PRINT i+1 + " >  Born: " + books[i].getAuthors()[j].getBirthYear()
+        ENDFOR
+    ENDFOR
+    
+    PRINT "Select a book: "
+
+    input <- 0
+    GET input
+    bookIndex <- input - 1
+
+    PRINT "************************************"
+
+    WHILE loop DO
+        SWITCH printBookEditMenu(input, books[bookIndex]) OF
+            CASE 1
+                addAuthorPrompt(books[bookIndex])
+            ENDCASE
+            CASE 2
+                removeAuthorPrompt(bookIndex)
+            ENDCASE
+            CASE 3
+                editAuthor(bookIndex)
+            ENDCASE
+            CASE 4
+                PRINT "Enter new title: "
+                input <- ""
+                GET input
+                books[bookIndex].setTitle(input)
+            ENDCASE
+            CASE 5
+                PRINT "Enter new year of publication: "
+                input <- 0
+                GET input
+                books[bookIndex].setYear(String.valueOf(input))
+            ENDCASE
+            CASE 6
+                PRINT "Enter new Edition: "
+                input <- ""
+                GET input
+                books[bookIndex].setEdition(input)
+            ENDCASE
+            CASE 7
+                PRINT "Enter new ISBN: "
+                input <- ""
+                GET input
+                books[bookIndex].setISBN(input)
+            ENDCASE                
+            CASE 8
+                books[bookIndex].setEbook(!books[bookIndex].isEbook())
+            ENDCASE
+            CASE 9
+                deleteBook(bookIndex)
+                loop <- false
+            ENDCASE
+            CASE 10
+                loop <- false
+            ENDCASE
+            DEFAULT
+                ERROR "Please choose a valid menu option (enter 1-9)"
+        ENDSWITCH
+    ENDWHILE
+    
+    PRINT "************************************"
+END editBook
+
+METHOD: deleteBook
+IMPORT: bookIndex (int)
+EXPORT: none
+ALGORITHM:
+    books[bookIndex] <- null
+    
+    FOR EACH i <- bookIndex  TO books.length - 2 CHANGEBY 1
+        books[i] <- books[i+1]
+    ENDFOR
+
+    books[i] <- null
+    books.pop()
+END deleteBook
+
+METHOD: printAllBooks
+IMPORT: none
+EXPORT: none
+ALGORITHM:
+    PRINT "************************************"
+    PRINT "             All Books              "
+    PRINT "************************************"
+    PRINT "List of Books:"
+    bookPrinter(books)
+    PRINT "************************************"
+END printAllBooks
+
+
+
+/*****************************************************
+    * Name   : handleArgs                               *
+    * Date   : 08/10/2024                               *
+    * Import : args (String[])                          *
+    * Export : value (boolean)                          *
+    * Purpose: Handle user arguments (if supplied).     *
+    *          Allows users to specify alternate data   *
+    *          file locations.                          *
+    *****************************************************/
+METHOD: handleArgs
+IMPORT: args (String[])  
+EXPORT: value (boolean)
+ALGORITHM:
+    value <- false
+
+    IF args.length = 0 THEN
+        value <- true
+        return
+    ENDIF
+
+    IF args[0] = "-h" OR args[0] = "--help" THEN
+        printHelpPrompt()
+        return
+    ENDIF
+    
+    IF args[0] = "-f" OR args[0] = "--file" THEN
+        IF args.length = 1 THEN
+            PRINT "Error: please specify data file location when using file flag."
+            return
+        ENDIF
+
+        PRINT "Reading from data file " + args[1]
+        dataFile <- File(args[1])
+    
+        IF dataFile.exists() THEN
+            csvTools.setFilePath(args[1])
+            value <- true
+            return
+        ELSE
+            PRINT "Error: Could not open file located at " + args[1]
+            return
+        ENDIF
+    ENDIF
+
+    PRINT "Error: unknown flags provided."
+    PRINT "Printing usage information..."
+    printHelpPrompt()
+    return
+END handleArgs
+
+MAIN
+    global books <- []
+    global authors <- []
+    global filePath <- ".\StartingDataFile.csv"
+    global csvHeader <- ["title","familyNameOne",  "firstNameOne",  "nationalityOne",  "birthYearOne","familyNameTwo",  "firstNameTwo",  "nationalityTwo",  "birthYearTwo","familyNameThree","firstNameThree","nationalityThree","birthYearThree","year","isbn","ebook","edition"]
+
+    IF handleArgs(args) THEN
+        CSVData <- csvReader()
+        genBooks(CSVData)
+
+        boolean loop <- true
+        WHILE loop DO
+            SWITCH printMenu(input) DO
+                CASE 0
+                    clearScreen()
+                ENDCASE
+                CASE 1
+                    printAllBooks()
+                ENDCASE        
+                CASE 2
+                    eBooks()
+                ENDCASE        
+                CASE 3
+                    noneBooks()
+                ENDCASE        
+                CASE 4
+                    booksByAuthor()
+                ENDCASE        
+                CASE 5
+                    addBook()
+                    writeCSV(books)
+                ENDCASE        
+                CASE 6
+                    editBook()
+                    writeCSV(books)
+                ENDCASE
+                CASE 7
+                    loop <- false
+                ENDCASE                        
+                DEFAULT
+                    ERROR "Please choose a valid menu option (enter 1-7)"
+            ENDSWITCH
+            
+        
+        writeCSV(books)
+        PRINT "Thank you for using the system!"
+    ENDIF
+END MAIN
